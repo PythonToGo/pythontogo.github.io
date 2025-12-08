@@ -1,11 +1,7 @@
+#  bundle exec jekyll serve
+
+
 #  The contact options.
-
-- type: theme-toggle
-  icon: "fas fa-moon"
-  label: "Toggle dark/light theme"
-  url: "#"
-  js: true # Custom JS will handle the theme toggle
-
   
 - type: github
   icon: "fab fa-github"

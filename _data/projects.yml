@@ -1,0 +1,52 @@
+# Projects data for Chirpy theme
+# This file is used by the projects layout (_tabs/projects.md)
+
+- name: Machine Intelligence and Society
+  description: The project is about basic machine learning methods and fairness in machine learning associated with the Machine Intelligence and Society 2023 course
+  period: "Apr 2023 – Sep 20243"
+  badge: "Bachelor Thesis, TU Munich, Germany"
+  icon: "fas fa-project-diagram"
+  tags:
+    - "Machine Learning/ Deep Learning"
+    - "Python"
+    - "Thesis"
+  # github: # Add GitHub repository URL if available
+  # url: # Add project URL if available
+  # image: # Add project image path if available
+
+- name: 두번째 프로젝트
+  description: 두번째 설명
+  period: 
+  badge: "PLAVE"
+  icon: "fas fa-code"
+  tags:
+    - "두번째"
+    - "Python"
+  # github: # Add GitHub repository URL if available
+  # url: # Add project URL if available
+  # image: # Add project image path if available
+
+- name: 세번째 플젝
+  description: Happy Hedgehog Project
+  period: "My Hole Life"
+  badge: "히히 호호"
+  icon: "fas fa-chalkboard-teacher"
+  tags:
+    - "hedgehug"
+    - "Python"
+    - "NLP"
+  # github: # Add GitHub repository URL if available
+  # url: # Add project URL if available
+  # image: # Add project image path if available
+
+# - name: Fairness of Predictive Modelling Based on Traffic Check Data
+#   description: Develop a predictive model for arrest decisions using the North Carolina Policing Dataset
+#   period: "April 2023 – Sep 2023"
+#   badge: "TU Munich, Germany"
+#   icon: "fas fa-chart-line"
+#   tags:
+#     - "Machine Learning/ Deep Learning"
+#     - "Python"
+#   # github: # Add GitHub repository URL if available
+#   # url: # Add project URL if available
+#   # image: # Add project image path if available
