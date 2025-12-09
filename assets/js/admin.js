@@ -1,21 +1,20 @@
 /**
- * 관리자 페이지 기능
- * GitHub API를 사용하여 포스트 생성, 수정, 목록 조회
+ * admin page
  */
 
 (function() {
   'use strict';
 
-  // 설정
+  // settings
   const GITHUB_REPO = 'PythonToGo/PythonToGo.github.io';
   const GITHUB_BRANCH = 'main';
   const GITHUB_USERNAME = 'PythonToGo';
-  const ADMIN_PASSWORD_KEY = 'admin_password'; // 간단한 비밀번호 인증용
+  const ADMIN_PASSWORD_KEY = 'admin_password'; // simple password authentication
 
   let mdeEditor = null;
   let currentPostPath = null;
 
-  // GitHub API 헤더 생성
+  // GitHub API header
   function getAuthHeaders() {
     const token = localStorage.getItem('github_pat');
     if (!token) {
@@ -29,9 +28,9 @@
     };
   }
 
-  // 관리자 로그인 확인
+  // check admin login
   async function checkAdminAuth() {
-    // GitHub 인증 확인
+    // check GitHub authentication
     if (window.GitHubAuth) {
       const isAuth = await window.GitHubAuth.isAuthenticated();
       if (isAuth) {
@@ -42,17 +41,17 @@
       }
     }
     
-    // 간단한 비밀번호 인증 (개발용)
+    // simple password authentication (for development)
     const savedPassword = localStorage.getItem(ADMIN_PASSWORD_KEY);
-    return savedPassword === 'admin'; // 실제로는 더 안전한 방법 사용 권장
+    return savedPassword === 'admin'; // recommended to use a more secure method in production
   }
 
-  // 관리자 로그인 처리
+  // handle admin login
   async function handleLogin() {
     const password = document.getElementById('admin-password').value;
     const errorDiv = document.getElementById('auth-error');
 
-    // GitHub 인증 시도
+    // try GitHub authentication
     if (window.GitHubAuth) {
       const isAuth = await window.GitHubAuth.isAuthenticated();
       if (isAuth) {
@@ -64,24 +63,24 @@
       }
     }
 
-    // 간단한 비밀번호 인증 (개발용)
+    // simple password authentication (for development)
     if (password === 'admin') {
       localStorage.setItem(ADMIN_PASSWORD_KEY, password);
       showAdminEditor();
     } else {
-      errorDiv.textContent = '비밀번호가 올바르지 않습니다.';
+      errorDiv.textContent = 'Password is incorrect.';
       errorDiv.style.display = 'block';
     }
   }
 
-  // 관리자 에디터 표시
+  // show admin editor
   function showAdminEditor() {
     document.getElementById('admin-auth').style.display = 'none';
     document.getElementById('admin-editor').style.display = 'block';
     initEditor();
   }
 
-  // EasyMDE 에디터 초기화
+  // initialize EasyMDE editor
   function initEditor() {
     if (mdeEditor) {
       return;
@@ -106,7 +105,7 @@
     });
   }
 
-  // 새 포스트 작성
+  // create new post
   function newPost() {
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0];
@@ -130,7 +129,7 @@
     document.getElementById('save-status').textContent = '';
   }
 
-  // 포스트 목록 로드
+  // load post list
   async function loadPosts() {
     const postListDiv = document.getElementById('post-list');
     const isVisible = postListDiv.style.display !== 'none';
@@ -150,7 +149,7 @@
         return;
       }
 
-      // GitHub API로 _posts 디렉토리 파일 목록 가져오기
+      // get file list in _posts directory using GitHub API
       const response = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/_posts`,
         {
@@ -159,7 +158,7 @@
       );
 
       if (!response.ok) {
-        throw new Error('포스트 목록을 가져올 수 없습니다.');
+        throw new Error('Failed to load post list.');
       }
 
       const files = await response.json();
@@ -167,7 +166,7 @@
         .filter(file => file.name.endsWith('.md'))
         .sort((a, b) => b.name.localeCompare(a.name));
 
-      let html = '<h4>포스트 목록</h4>';
+      let html = '<h4>Post List</h4>';
       posts.forEach(post => {
         html += `<div class="post-item" data-path="${post.path}">${post.name}</div>`;
       });
@@ -175,7 +174,7 @@
       postListDiv.innerHTML = html;
       postListDiv.style.display = 'block';
 
-      // 포스트 클릭 이벤트
+      // click event for post
       postListDiv.querySelectorAll('.post-item').forEach(item => {
         item.addEventListener('click', () => {
           loadPost(item.dataset.path);
@@ -184,20 +183,20 @@
 
     } catch (error) {
       console.error('Error loading posts:', error);
-      alert('포스트 목록을 불러오는 중 오류가 발생했습니다: ' + error.message);
+      alert('Failed to load post list: ' + error.message);
     }
   }
 
-  // 포스트 로드
+  // load post
   async function loadPost(filePath) {
     try {
       const token = localStorage.getItem('github_pat');
       if (!token) {
-        alert('GitHub 토큰이 필요합니다.');
+        alert('GitHub token is required.');
         return;
       }
 
-      // GitHub API로 파일 내용 가져오기
+      // get file content using GitHub API
       const response = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`,
         {
@@ -206,22 +205,22 @@
       );
 
       if (!response.ok) {
-        throw new Error('포스트를 불러올 수 없습니다.');
+        throw new Error('Failed to load post.');
       }
 
       const file = await response.json();
       const content = atob(file.content.replace(/\n/g, ''));
 
-      // Front matter 파싱
+      // parse front matter
       const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
       if (!frontMatterMatch) {
-        throw new Error('포스트 형식이 올바르지 않습니다.');
+        throw new Error('Invalid post format.');
       }
 
       const frontMatter = frontMatterMatch[1];
       const body = frontMatterMatch[2];
 
-      // Front matter 파싱
+      // parse front matter
       const titleMatch = frontMatter.match(/title:\s*["'](.+?)["']/);
       const dateMatch = frontMatter.match(/date:\s*(.+?)(?:\s|$)/);
       const categoriesMatch = frontMatter.match(/categories:\s*\[(.+?)\]/);
@@ -269,16 +268,16 @@
 
     } catch (error) {
       console.error('Error loading post:', error);
-      alert('포스트를 불러오는 중 오류가 발생했습니다: ' + error.message);
+      alert('Failed to load post: ' + error.message);
     }
   }
 
-  // 포스트 저장
+  // save post
   async function savePost() {
     try {
       const token = localStorage.getItem('github_pat');
       if (!token) {
-        alert('GitHub 토큰이 필요합니다. GitHub로 로그인해주세요.');
+        alert('GitHub token is required. Please login to GitHub.');
         if (window.GitHubAuth) {
           window.GitHubAuth.login();
         }
@@ -287,7 +286,7 @@
 
       const title = document.getElementById('post-title').value.trim();
       if (!title) {
-        alert('제목을 입력해주세요.');
+        alert('Please enter a title.');
         return;
       }
 
@@ -310,7 +309,7 @@
 
       const content = mdeEditor ? mdeEditor.value() : '';
 
-      // Front matter 생성
+      // create front matter
       const frontMatter = `---
 title: "${title.replace(/"/g, '\\"')}"
 date: ${date} ${time}:00
@@ -324,7 +323,7 @@ comments: ${comments}
 
 ${content}`;
 
-      // 파일명 생성
+      // create filename
       const dateStr = date.replace(/-/g, '-');
       const titleSlug = title
         .toLowerCase()
@@ -333,10 +332,10 @@ ${content}`;
       const filename = `${dateStr}-${titleSlug}.md`;
       const filePath = `_posts/${filename}`;
 
-      // GitHub API로 파일 저장
+      // save file using GitHub API
       let sha = null;
       if (currentPostPath) {
-        // 기존 파일인 경우 SHA 가져오기
+        // get SHA if it is an existing file
         const getResponse = await fetch(
           `https://api.github.com/repos/${GITHUB_REPO}/contents/${currentPostPath}`,
           {
@@ -365,10 +364,10 @@ ${content}`;
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || '포스트 저장에 실패했습니다.');
+        throw new Error(error.message || 'Failed to save post.');
       }
 
-      document.getElementById('save-status').textContent = '✓ 저장 완료!';
+      document.getElementById('save-status').textContent = 'Saved!';
       document.getElementById('save-status').style.color = 'green';
       currentPostPath = filePath;
 
@@ -378,32 +377,32 @@ ${content}`;
 
     } catch (error) {
       console.error('Error saving post:', error);
-      alert('포스트 저장 중 오류가 발생했습니다: ' + error.message);
-      document.getElementById('save-status').textContent = '✗ 저장 실패';
+      alert('Failed to save post: ' + error.message);
+      document.getElementById('save-status').textContent = 'Failed to save post.';
       document.getElementById('save-status').style.color = 'red';
     }
   }
 
-  // 프리뷰 표시
+  // show preview
   function showPreview() {
     const previewContainer = document.getElementById('preview-container');
     const previewContent = document.getElementById('preview-content');
     const content = mdeEditor ? mdeEditor.value() : '';
 
-    // 간단한 마크다운 프리뷰 (실제로는 마크다운 파서 사용 권장)
+    // simple markdown preview (recommended to use markdown parser in production)
     previewContent.innerHTML = mdeEditor ? mdeEditor.preview() : '';
     previewContainer.style.display = previewContainer.style.display === 'none' ? 'block' : 'none';
   }
 
-  // 초기화
+  // initialize
   async function init() {
-    // 로그인 상태 확인
+    // check login status
     const isAuth = await checkAdminAuth();
     if (isAuth) {
       showAdminEditor();
     }
 
-    // 이벤트 리스너 등록
+    // register event listeners
     document.getElementById('login-btn').addEventListener('click', handleLogin);
     document.getElementById('admin-password').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
@@ -416,7 +415,7 @@ ${content}`;
     document.getElementById('preview-post-btn').addEventListener('click', showPreview);
   }
 
-  // DOM 로드 완료 시 초기화
+  // initialize when DOM is loaded
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
