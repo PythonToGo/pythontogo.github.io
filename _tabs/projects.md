@@ -72,78 +72,102 @@ order: 2
 
 <script>
 (function() {
-  // Collect all unique tags from project cards
-  const projectCards = document.querySelectorAll('.project-card');
-  const tagMap = new Map(); // normalized tag -> original tag
-  
-  projectCards.forEach(card => {
-    const normalizedTags = card.getAttribute('data-tags');
-    const originalTags = card.getAttribute('data-tags-original');
-    if (normalizedTags && originalTags) {
-      const normalizedArray = normalizedTags.split(',');
-      const originalArray = originalTags.split(',');
-      normalizedArray.forEach((normTag, index) => {
-        const trimmed = normTag.trim();
-        if (trimmed && !tagMap.has(trimmed)) {
-          tagMap.set(trimmed, originalArray[index] ? originalArray[index].trim() : trimmed);
-        }
-      });
+  function initProjectFilters() {
+    // Collect all unique tags from project cards
+    const projectCards = document.querySelectorAll('.project-card');
+    const tagMap = new Map(); // normalized tag -> original tag
+    
+    if (projectCards.length === 0) {
+      // If cards aren't loaded yet, try again after a short delay
+      setTimeout(initProjectFilters, 100);
+      return;
     }
-  });
-  
-  // Create filter buttons for each tag
-  const filterContainer = document.getElementById('filter-buttons');
-  const sortedTags = Array.from(tagMap.keys()).sort();
-  
-  sortedTags.forEach(normalizedTag => {
-    const button = document.createElement('button');
-    button.className = 'btn btn-sm btn-outline-primary filter-btn';
-    button.setAttribute('data-filter', normalizedTag);
-    button.style.margin = '2px';
-    button.textContent = tagMap.get(normalizedTag);
-    filterContainer.appendChild(button);
-  });
-  
-  // Filter functionality
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  
-  filterButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const filter = this.getAttribute('data-filter');
-      
-      // Update active button
-      filterButtons.forEach(btn => {
-        btn.classList.remove('active');
-        btn.classList.remove('btn-primary');
-        btn.classList.add('btn-outline-primary');
-      });
-      this.classList.add('active');
-      this.classList.remove('btn-outline-primary');
-      this.classList.add('btn-primary');
-      
-      // Filter cards with animation
-      projectCards.forEach(card => {
-        if (filter === 'all') {
-          card.style.display = '';
-          setTimeout(() => {
-            card.style.opacity = '1';
-          }, 10);
-        } else {
-          const cardTags = card.getAttribute('data-tags');
-          if (cardTags && cardTags.split(',').includes(filter)) {
+    
+    projectCards.forEach(card => {
+      const normalizedTags = card.getAttribute('data-tags');
+      const originalTags = card.getAttribute('data-tags-original');
+      if (normalizedTags && originalTags) {
+        const normalizedArray = normalizedTags.split(',');
+        const originalArray = originalTags.split(',');
+        normalizedArray.forEach((normTag, index) => {
+          const trimmed = normTag.trim();
+          if (trimmed && !tagMap.has(trimmed)) {
+            tagMap.set(trimmed, originalArray[index] ? originalArray[index].trim() : trimmed);
+          }
+        });
+      }
+    });
+    
+    // Create filter buttons for each tag
+    const filterContainer = document.getElementById('filter-buttons');
+    if (!filterContainer) {
+      setTimeout(initProjectFilters, 100);
+      return;
+    }
+    
+    const sortedTags = Array.from(tagMap.keys()).sort();
+    
+    sortedTags.forEach(normalizedTag => {
+      const button = document.createElement('button');
+      button.className = 'btn btn-sm btn-outline-primary filter-btn';
+      button.setAttribute('data-filter', normalizedTag);
+      button.style.margin = '2px';
+      button.textContent = tagMap.get(normalizedTag);
+      filterContainer.appendChild(button);
+    });
+    
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        
+        // Update active button
+        filterButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn-outline-primary');
+        });
+        this.classList.add('active');
+        this.classList.remove('btn-outline-primary');
+        this.classList.add('btn-primary');
+        
+        // Filter cards with animation
+        projectCards.forEach(card => {
+          if (filter === 'all') {
             card.style.display = '';
             setTimeout(() => {
               card.style.opacity = '1';
             }, 10);
           } else {
-            card.style.opacity = '0';
-            setTimeout(() => {
-              card.style.display = 'none';
-            }, 200);
+            const cardTags = card.getAttribute('data-tags');
+            if (cardTags && cardTags.split(',').includes(filter)) {
+              card.style.display = '';
+              setTimeout(() => {
+                card.style.opacity = '1';
+              }, 10);
+            } else {
+              card.style.opacity = '0';
+              setTimeout(() => {
+                card.style.display = 'none';
+              }, 200);
+            }
           }
-        }
+        });
       });
     });
-  });
+  }
+  
+  // Wait for DOM to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add a small delay to ensure all content is rendered
+      setTimeout(initProjectFilters, 100);
+    });
+  } else {
+    // DOM is already loaded
+    setTimeout(initProjectFilters, 100);
+  }
 })();
 </script>

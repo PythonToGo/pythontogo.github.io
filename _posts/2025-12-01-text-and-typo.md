@@ -96,7 +96,8 @@ Moon
 
 ## Links
 
-<http://127.0.0.1:4000>
+<!-- Example link (commented out for htmlproofer) -->
+<!-- <http://127.0.0.1:4000> -->
 
 ## Footnote
 
