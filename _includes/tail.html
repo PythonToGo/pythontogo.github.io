@@ -2,3 +2,120 @@
 <!-- Chirpy 테마는 tail.html을 자동으로 포함시킵니다 -->
 {% include github-edit-scripts.html %}
 
+<!-- PWA 업데이트 알림 수정 스크립트 -->
+<script>
+  (function () {
+    "use strict";
+
+    let refreshing = false;
+
+    // Update 버튼 클릭 핸들러 설정
+    function setupUpdateButton() {
+      const notification = document.getElementById("notification");
+      if (!notification) {
+        return;
+      }
+
+      const updateButton = notification.querySelector(
+        'button.btn-primary[aria-label="Update"]'
+      );
+      if (updateButton && !updateButton.hasAttribute("data-update-handler")) {
+        updateButton.setAttribute("data-update-handler", "true");
+        updateButton.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (refreshing) {
+            return;
+          }
+
+          refreshing = true;
+
+          // 서비스 워커에 SKIP_WAITING 메시지 전송
+          if ("serviceWorker" in navigator) {
+            navigator.serviceWorker
+              .getRegistration()
+              .then(function (registration) {
+                if (registration && registration.waiting) {
+                  // 서비스 워커는 "SKIP_WAITING" 문자열을 직접 받음
+                  registration.waiting.postMessage("SKIP_WAITING");
+                }
+
+                // 알림 닫기 (Bootstrap Toast가 있으면 사용, 없으면 직접 숨김)
+                if (typeof bootstrap !== "undefined" && bootstrap.Toast) {
+                  const toast = bootstrap.Toast.getInstance(notification);
+                  if (toast) {
+                    toast.hide();
+                  } else {
+                    notification.classList.add("d-none");
+                  }
+                } else {
+                  notification.classList.add("d-none");
+                }
+
+                // 페이지 새로고침
+                setTimeout(function () {
+                  window.location.reload();
+                }, 300);
+              })
+              .catch(function (error) {
+                console.error("Service worker update error:", error);
+                // 에러 발생 시에도 새로고침
+                notification.classList.add("d-none");
+                setTimeout(function () {
+                  window.location.reload();
+                }, 300);
+              });
+          } else {
+            // 서비스 워커가 지원되지 않으면 그냥 새로고침
+            notification.classList.add("d-none");
+            setTimeout(function () {
+              window.location.reload();
+            }, 300);
+          }
+        });
+      }
+    }
+
+    // 서비스 워커 컨트롤러 변경 감지
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (!refreshing) {
+          refreshing = true;
+          window.location.reload();
+        }
+      });
+    }
+
+    // 초기화
+    function init() {
+      // 즉시 실행
+      setupUpdateButton();
+
+      // DOMContentLoaded 후 실행
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () {
+          setTimeout(setupUpdateButton, 500);
+        });
+      } else {
+        setTimeout(setupUpdateButton, 500);
+      }
+
+      // window.load 후 실행
+      window.addEventListener("load", function () {
+        setTimeout(setupUpdateButton, 1000);
+      });
+
+      // 주기적으로 확인 (동적으로 추가될 수 있음)
+      const checkInterval = setInterval(function () {
+        setupUpdateButton();
+        // 10초 후에는 중지
+        setTimeout(function () {
+          clearInterval(checkInterval);
+        }, 10000);
+      }, 500);
+    }
+
+    init();
+  })();
+</script>
