@@ -101,7 +101,7 @@ avatar: /assets/img/avatar.png
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
-social_preview_image: /assets/img/social-preview-image.png  # string, local or CORS resources
+social_preview_image: /assets/img/social-preview-image.png # string, local or CORS resources
 
 # boolean type, the global switch for TOC in posts.
 toc: true
@@ -114,7 +114,7 @@ comments:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
   # utterances settings › https://utteranc.es/
   utterances:
-    repo: PythonToGo/PythonToGo.github.io # <gh-username>/<repo> 
+    repo: PythonToGo/PythonToGo.github.io # <gh-username>/<repo>
     issue_term: pathname # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
@@ -137,14 +137,11 @@ assets:
     env: # [development | production]
 
 pwa:
-  enabled: true # The option for PWA feature (installable)
+  enabled: false # disable PWA to avoid service worker issues on static hosting
   cache:
-    enabled: true # The option for PWA offline cache
-    # Paths defined here will be excluded from the PWA cache.
-    # Usually its value is the `baseurl` of another website that
-    # shares the same domain name as the current website.
+    enabled: false
     deny_paths:
-      # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
+      # - "/example"
 
 paginate: 10
 
