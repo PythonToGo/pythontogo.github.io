@@ -9,3 +9,35 @@
 ';
 
 /* append your custom style below */
+
+/* Category submenu indentation */
+#sidebar .nav-item.category-sub {
+  margin-left: 1.5rem;
+}
+
+#sidebar .nav-item.category-sub .nav-link {
+  padding-left: 0.5rem;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+#sidebar .nav-item.category-sub .nav-link i {
+  margin-right: 0.5rem;
+  font-size: 0.9em;
+}
+
+/* Category sub-submenu (child categories) indentation */
+#sidebar .nav-item.category-sub-sub {
+  margin-left: 3rem;
+}
+
+#sidebar .nav-item.category-sub-sub .nav-link {
+  padding-left: 0.5rem;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+#sidebar .nav-item.category-sub-sub .nav-link i {
+  margin-right: 0.5rem;
+  font-size: 0.9em;
+}

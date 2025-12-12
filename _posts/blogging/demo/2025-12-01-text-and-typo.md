@@ -1,7 +1,7 @@
 ---
 title: Text and Typography
 description: Examples of text, typography, math equations, diagrams, flowcharts, pictures, videos, and more.
-author: cotes
+# author: cotes
 date: 2025-12-01 10:40:00 +0800
 categories: [Blogging, Demo]
 tags: [typography]
