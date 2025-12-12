@@ -1,8 +1,7 @@
 <!-- GitHub 인증 및 Edit/Create 버튼 스크립트 -->
 <!-- Chirpy 테마는 tail.html을 자동으로 포함시킵니다 -->
-{% include github-edit-scripts.html %}
-
-<!-- PWA 업데이트 알림 수정 스크립트 -->
+{% include github-edit-scripts.html %} {% if site.pwa.enabled %}
+<!-- PWA 업데이트 알림 수정 스크립트 (PWA enabled) -->
 <script>
   (function () {
     "use strict";
@@ -119,12 +118,16 @@
 
     // 서비스 워커 컨트롤러 변경 감지
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.addEventListener("controllerchange", function () {
-        if (!refreshing) {
-          refreshing = true;
-          window.location.reload(true);
+      const controllerChangeEvent = "controllerchange";
+      navigator.serviceWorker.addEventListener(
+        controllerChangeEvent,
+        function () {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload(true);
+          }
         }
-      });
+      );
     }
 
     // 초기화
@@ -178,3 +181,4 @@
     init();
   })();
 </script>
+{% endif %}
