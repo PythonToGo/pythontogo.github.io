@@ -79,6 +79,7 @@ order: 2
   let eventDelegationAttached = false;
   
   function normalizeTag(tag) {
+    if (!tag) return '';
     return tag.replace(/\s+/g, '-').replace(/\//g, '-').toLowerCase().trim();
   }
   
@@ -87,40 +88,42 @@ order: 2
     const allFilterButtons = document.querySelectorAll('.filter-btn');
     
     // Update active button
-    allFilterButtons.forEach(btn => {
+    allFilterButtons.forEach(function(btn) {
       btn.classList.remove('active', 'btn-primary');
       btn.classList.add('btn-outline-primary');
     });
     
-    const activeButton = Array.from(allFilterButtons).find(btn => 
-      btn.getAttribute('data-filter') === filter
-    );
+    const activeButton = Array.from(allFilterButtons).find(function(btn) {
+      return btn.getAttribute('data-filter') === filter;
+    });
     if (activeButton) {
       activeButton.classList.add('active', 'btn-primary');
       activeButton.classList.remove('btn-outline-primary');
     }
     
     // Filter cards with animation
-    allProjectCards.forEach(card => {
+    allProjectCards.forEach(function(card) {
       if (filter === 'all') {
         card.style.display = '';
         card.style.opacity = '1';
       } else {
         const cardTags = card.getAttribute('data-tags');
         if (cardTags) {
-          const tagArray = cardTags.split(',').map(t => t.trim());
-          if (tagArray.includes(filter)) {
+          const tagArray = cardTags.split(',').map(function(t) {
+            return t.trim();
+          });
+          if (tagArray.indexOf(filter) !== -1) {
             card.style.display = '';
             card.style.opacity = '1';
           } else {
             card.style.opacity = '0';
-            setTimeout(() => {
+            setTimeout(function() {
               card.style.display = 'none';
             }, 200);
           }
         } else {
           card.style.opacity = '0';
-          setTimeout(() => {
+          setTimeout(function() {
             card.style.display = 'none';
           }, 200);
         }
@@ -130,7 +133,7 @@ order: 2
   
   function createFilterButtons() {
     if (buttonsCreated) {
-      return;
+      return true;
     }
     
     const filterContainer = document.getElementById('filter-buttons');
@@ -150,31 +153,35 @@ order: 2
       return false;
     }
     
-    const tagMap = new Map();
+    const tagMap = {};
     
     // Collect all unique tags
-    projectCards.forEach(card => {
+    projectCards.forEach(function(card) {
       const normalizedTags = card.getAttribute('data-tags');
       const originalTags = card.getAttribute('data-tags-original');
       if (normalizedTags && originalTags) {
-        const normalizedArray = normalizedTags.split(',').map(t => t.trim());
-        const originalArray = originalTags.split(',').map(t => t.trim());
-        normalizedArray.forEach((normTag, index) => {
-          if (normTag && !tagMap.has(normTag)) {
-            tagMap.set(normTag, originalArray[index] || normTag);
+        const normalizedArray = normalizedTags.split(',').map(function(t) {
+          return t.trim();
+        });
+        const originalArray = originalTags.split(',').map(function(t) {
+          return t.trim();
+        });
+        normalizedArray.forEach(function(normTag, index) {
+          if (normTag && !tagMap.hasOwnProperty(normTag)) {
+            tagMap[normTag] = originalArray[index] || normTag;
           }
         });
       }
     });
     
     // Create filter buttons
-    const sortedTags = Array.from(tagMap.keys()).sort();
-    sortedTags.forEach(normalizedTag => {
+    const sortedTags = Object.keys(tagMap).sort();
+    sortedTags.forEach(function(normalizedTag) {
       const button = document.createElement('button');
       button.className = 'btn btn-sm btn-outline-primary filter-btn';
       button.setAttribute('data-filter', normalizedTag);
       button.style.margin = '2px';
-      button.textContent = tagMap.get(normalizedTag);
+      button.textContent = tagMap[normalizedTag];
       filterContainer.appendChild(button);
     });
     
@@ -188,7 +195,7 @@ order: 2
       return;
     }
     
-    // Event delegation for filter buttons (한 번만 등록)
+    // Event delegation for filter buttons
     if (!eventDelegationAttached) {
       filterContainer.addEventListener('click', function(e) {
         const target = e.target;
@@ -204,9 +211,9 @@ order: 2
     
     // Make badge tags clickable for filtering
     const projectCards = document.querySelectorAll('.project-card');
-    projectCards.forEach(card => {
+    projectCards.forEach(function(card) {
       const badges = card.querySelectorAll('.badge-primary');
-      badges.forEach(badge => {
+      badges.forEach(function(badge) {
         if (!badge.hasAttribute('data-filter-attached')) {
           badge.style.cursor = 'pointer';
           badge.setAttribute('data-filter-attached', 'true');
@@ -217,13 +224,17 @@ order: 2
             const normalizedTag = normalizeTag(tagText);
             
             // Find and click the corresponding filter button
-            const filterButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => 
-              btn.getAttribute('data-filter') === normalizedTag
-            );
+            const allButtons = document.querySelectorAll('.filter-btn');
+            let filterButton = null;
+            for (let i = 0; i < allButtons.length; i++) {
+              if (allButtons[i].getAttribute('data-filter') === normalizedTag) {
+                filterButton = allButtons[i];
+                break;
+              }
+            }
             if (filterButton) {
               filterButton.click();
             } else {
-              // 버튼이 아직 생성되지 않았으면 직접 필터 적용
               applyFilter(normalizedTag);
             }
           });
@@ -234,7 +245,7 @@ order: 2
   
   function initProjectFilters() {
     if (initialized) {
-      return;
+      return true;
     }
     
     const filterContainer = document.getElementById('filter-buttons');
@@ -254,7 +265,7 @@ order: 2
     return false;
   }
   
-  // 강력한 초기화 전략
+  // Initialize when DOM is ready
   function startInit() {
     let retryCount = 0;
     const maxRetries = 20;
@@ -271,7 +282,7 @@ order: 2
       return false;
     }
     
-    // Strategy 1: 즉시 시도
+    // Strategy 1: Try immediately
     tryInit();
     
     // Strategy 2: DOMContentLoaded
@@ -306,7 +317,7 @@ order: 2
       }, 15000);
     }
     
-    // Strategy 5: 최종 fallback
+    // Strategy 5: Final fallback
     setTimeout(function() {
       if (!initialized) {
         tryInit();
