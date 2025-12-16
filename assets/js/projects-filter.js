@@ -18,6 +18,7 @@
     allFilterButtons.forEach(function(btn) {
       btn.classList.remove('active', 'btn-primary');
       btn.classList.add('btn-outline-primary');
+      btn.style.cssText = 'margin: 2px; padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.25rem; border: 1px solid #0d6efd; color: #0d6efd; background-color: transparent; cursor: pointer;';
     });
     
     const activeButton = Array.from(allFilterButtons).find(function(btn) {
@@ -26,6 +27,7 @@
     if (activeButton) {
       activeButton.classList.add('active', 'btn-primary');
       activeButton.classList.remove('btn-outline-primary');
+      activeButton.style.cssText = 'margin: 2px; padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.25rem; border: 1px solid #0d6efd; color: #fff; background-color: #0d6efd; cursor: pointer;';
     }
     
     // Filter cards with animation
@@ -105,9 +107,10 @@
     const sortedTags = Object.keys(tagMap).sort();
     sortedTags.forEach(function(normalizedTag) {
       const button = document.createElement('button');
+      button.type = 'button';
       button.className = 'btn btn-sm btn-outline-primary filter-btn';
       button.setAttribute('data-filter', normalizedTag);
-      button.style.margin = '2px';
+      button.style.cssText = 'margin: 2px; padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.25rem; border: 1px solid #0d6efd; color: #0d6efd; background-color: transparent; cursor: pointer;';
       button.textContent = tagMap[normalizedTag];
       filterContainer.appendChild(button);
     });

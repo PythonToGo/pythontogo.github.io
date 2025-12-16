@@ -41,3 +41,39 @@
   margin-right: 0.5rem;
   font-size: 0.9em;
 }
+
+/* Projects filter buttons */
+#filter-buttons .filter-btn {
+  margin: 2px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+#filter-buttons .filter-btn.btn-outline-primary {
+  border: 1px solid #0d6efd;
+  color: #0d6efd;
+  background-color: transparent;
+}
+
+#filter-buttons .filter-btn.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+#filter-buttons .filter-btn.btn-primary,
+#filter-buttons .filter-btn.active {
+  border: 1px solid #0d6efd;
+  color: #fff;
+  background-color: #0d6efd;
+}
+
+#filter-buttons .filter-btn.btn-primary:hover,
+#filter-buttons .filter-btn.active:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
