@@ -123,6 +123,64 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
+// Get categories endpoint
+app.get('/api/categories', async (req, res) => {
+  try {
+    const postsDir = path.join(PROJECT_ROOT, '_posts');
+    
+    // Get all directories in _posts (categories)
+    const categories = new Map();
+    
+    async function scanDirectory(dir, parentPath = '') {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        const relativePath = parentPath ? `${parentPath}/${entry.name}` : entry.name;
+        
+        if (entry.isDirectory()) {
+          // This is a category or subcategory
+          const parts = relativePath.split('/');
+          const categoryName = parts[0];
+          const subcategoryName = parts.length > 1 ? parts[1] : null;
+          
+          if (!categories.has(categoryName)) {
+            categories.set(categoryName, {
+              name: categoryName,
+              subcategories: []
+            });
+          }
+          
+          if (subcategoryName) {
+            const category = categories.get(categoryName);
+            if (!category.subcategories.includes(subcategoryName)) {
+              category.subcategories.push(subcategoryName);
+            }
+          }
+          
+          // Recursively scan subdirectories
+          await scanDirectory(fullPath, relativePath);
+        }
+      }
+    }
+    
+    await scanDirectory(postsDir);
+    
+    // Convert Map to sorted array
+    const categoriesArray = Array.from(categories.values())
+      .map(cat => ({
+        name: cat.name,
+        subcategories: cat.subcategories.sort()
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    
+    res.json({ categories: categoriesArray });
+  } catch (error) {
+    console.error('List categories error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Markdown Editor API server running on http://localhost:${PORT}`);
   console.log(`Project root: ${PROJECT_ROOT}`);
