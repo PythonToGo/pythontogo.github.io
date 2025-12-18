@@ -61,14 +61,20 @@
   position: relative;
 }
 
-#sidebar .nav-item.post-toggle-item .nav-link.post-toggle-link .category-chevron {
+#sidebar
+  .nav-item.post-toggle-item
+  .nav-link.post-toggle-link
+  .category-chevron {
   position: absolute;
   right: 0.5rem;
   transition: transform 0.2s ease;
   font-size: 0.75em;
 }
 
-#sidebar .nav-item.post-toggle-item.expanded .nav-link.post-toggle-link .category-chevron {
+#sidebar
+  .nav-item.post-toggle-item.expanded
+  .nav-link.post-toggle-link
+  .category-chevron {
   transform: rotate(90deg);
 }
 
@@ -102,18 +108,27 @@
   position: relative;
 }
 
-#sidebar .nav-item.category-sub.has-children .nav-link.toggleable .category-chevron {
+#sidebar
+  .nav-item.category-sub.has-children
+  .nav-link.toggleable
+  .category-chevron {
   position: absolute;
   right: 0.5rem;
   transition: transform 0.2s ease;
   font-size: 0.75em;
 }
 
-#sidebar .nav-item.category-sub.has-children.expanded .nav-link.toggleable .category-chevron {
+#sidebar
+  .nav-item.category-sub.has-children.expanded
+  .nav-link.toggleable
+  .category-chevron {
   transform: rotate(90deg);
 }
 
-#sidebar .nav-item.category-sub.has-children.expanded .nav-link.toggleable .category-icon {
+#sidebar
+  .nav-item.category-sub.has-children.expanded
+  .nav-link.toggleable
+  .category-icon {
   color: var(--bs-primary, #0d6efd);
 }
 
@@ -263,7 +278,8 @@
   padding: 1rem;
   border: none;
   resize: none;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+    monospace;
   font-size: 14px;
   line-height: 1.6;
   outline: none;
@@ -315,7 +331,8 @@
   font-size: 85%;
   background-color: rgba(175, 184, 193, 0.2);
   border-radius: 3px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+    monospace;
 }
 
 .markdown-preview pre {
@@ -350,7 +367,8 @@
   background-color: transparent;
   color: inherit; /* Use highlight.js colors */
   font-size: 14px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+    monospace;
 }
 
 /* Highlight.js styles override */

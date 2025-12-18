@@ -15,16 +15,17 @@
   const AUTO_SAVE_INTERVAL = 3000;
   const DRAFT_STORAGE_KEY = 'markdown-editor-draft';
   const DRAFT_PATH_KEY = 'markdown-editor-draft-path';
-  
+
   // Detect if we're in development or production
-  const IS_DEVELOPMENT = window.location.hostname === 'localhost' || 
-                         window.location.hostname === '127.0.0.1' ||
-                         window.location.hostname === '';
-  
+  const IS_DEVELOPMENT =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '';
+
   // API base URL - use localhost:3001 for API server in development only
   // In production (GitHub Pages), we use GitHub API directly
   const API_BASE_URL = IS_DEVELOPMENT ? 'http://localhost:3001' : null;
-  
+
   function getApiUrl(endpoint) {
     // In production, don't use local API (it won't work on GitHub Pages)
     if (!IS_DEVELOPMENT) {
@@ -32,7 +33,7 @@
     }
     return API_BASE_URL ? `${API_BASE_URL}${endpoint}` : endpoint;
   }
-  
+
   function isLocalApiAvailable() {
     return IS_DEVELOPMENT && API_BASE_URL !== null;
   }
@@ -48,7 +49,7 @@
 
     // Load draft from localStorage (velog style)
     loadDraft();
-    
+
     // If editor is empty, show default template
     if (editor && (!editor.value || editor.value.trim() === '')) {
       setDefaultTemplate();
@@ -59,60 +60,66 @@
         breaks: true,
         gfm: true,
         headerIds: false,
-        mangle: false
+        mangle: false,
       });
-      
+
       // Configure marked to preserve math expressions and add syntax highlighting
       const renderer = new marked.Renderer();
       const originalParagraph = renderer.paragraph;
       const originalCode = renderer.code;
       const originalText = renderer.text;
-      
+
       // Preserve inline math in text
-      renderer.text = function(text) {
+      renderer.text = function (text) {
         // Don't escape math expressions - they will be handled separately
         return originalText.call(this, text);
       };
-      
+
       // Preserve math blocks in paragraphs
-      renderer.paragraph = function(text) {
+      renderer.paragraph = function (text) {
         // Don't wrap math blocks in <p> tags
         const trimmed = text.trim();
-        if (trimmed.startsWith('$$') && trimmed.endsWith('$$') && trimmed.length > 4) {
+        if (
+          trimmed.startsWith('$$') &&
+          trimmed.endsWith('$$') &&
+          trimmed.length > 4
+        ) {
           return trimmed + '\n';
         }
         return originalParagraph.call(this, text);
       };
-      
+
       // Add syntax highlighting to code blocks
-      renderer.code = function(code, language) {
+      renderer.code = function (code, language) {
         // Default to python if no language specified
         const lang = language || 'python';
-        
+
         // Map language aliases
         const langMap = {
-          'py': 'python',
-          'js': 'javascript',
-          'cpp': 'cpp',
+          py: 'python',
+          js: 'javascript',
+          cpp: 'cpp',
           'c++': 'cpp',
-          'c': 'c',
-          'bash': 'bash',
-          'sh': 'bash',
-          'shell': 'bash',
-          'zsh': 'bash',
-          'cmd': 'bash',
-          'powershell': 'bash',
-          'terminal': 'bash',
-          'console': 'bash'
+          c: 'c',
+          bash: 'bash',
+          sh: 'bash',
+          shell: 'bash',
+          zsh: 'bash',
+          cmd: 'bash',
+          powershell: 'bash',
+          terminal: 'bash',
+          console: 'bash',
         };
         const mappedLang = langMap[lang.toLowerCase()] || lang.toLowerCase();
-        
+
         // Check if highlight.js is available
         if (typeof hljs !== 'undefined') {
           try {
             // Check if language is supported
             if (hljs.getLanguage(mappedLang)) {
-              const highlighted = hljs.highlight(code, { language: mappedLang });
+              const highlighted = hljs.highlight(code, {
+                language: mappedLang,
+              });
               // Add terminal class for bash/shell languages
               const isTerminal = ['bash', 'shell', 'sh'].includes(mappedLang);
               const preClass = isTerminal ? 'terminal-block' : '';
@@ -122,11 +129,11 @@
             console.warn('Highlight.js error:', e);
           }
         }
-        
+
         // Fallback to original code rendering
         return originalCode.call(this, code, lang);
       };
-      
+
       marked.setOptions({ renderer: renderer });
     }
 
@@ -162,8 +169,7 @@
         const start = editor.selectionStart || 0;
         const end = editor.selectionEnd || 0;
         const value = editor.value || '';
-        editor.value =
-          value.substring(0, start) + '  ' + value.substring(end);
+        editor.value = value.substring(0, start) + '  ' + value.substring(end);
         const pos = start + 2;
         if (typeof editor.setSelectionRange === 'function') {
           editor.setSelectionRange(pos, pos);
@@ -194,10 +200,15 @@
     window.updatePostPath = updatePostPath;
 
     // Close category selector when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       const selector = document.getElementById('category-selector');
       const btn = document.getElementById('category-selector-btn');
-      if (selector && btn && !selector.contains(e.target) && !btn.contains(e.target)) {
+      if (
+        selector &&
+        btn &&
+        !selector.contains(e.target) &&
+        !btn.contains(e.target)
+      ) {
         selector.style.display = 'none';
       }
     });
@@ -215,16 +226,16 @@
 
   async function performAutoSave() {
     if (!editor || isAutoSaving) return;
-    
+
     const content = editor.value;
-    
+
     // Skip auto-save if no category is selected or content hasn't changed
     if (!selectedCategory || content === lastSavedContent) {
       // Still save to localStorage as backup
       saveDraftToLocalStorage();
       return;
     }
-    
+
     // Generate path if needed
     const pathInput = document.getElementById('post-path');
     let path = pathInput?.value?.trim();
@@ -232,24 +243,24 @@
       updatePostPath();
       path = pathInput?.value?.trim();
     }
-    
+
     if (!path) {
       // No path generated, skip auto-save
       saveDraftToLocalStorage();
       return;
     }
-    
+
     // Skip if content is empty
     if (!content || !content.trim()) {
       return;
     }
-    
+
     isAutoSaving = true;
-    
+
     try {
       // Check if GitHub token is available
       const githubToken = localStorage.getItem('github-token');
-      
+
       if (githubToken) {
         // Use GitHub API for auto-save
         await autoSaveToGitHub(path, content);
@@ -259,7 +270,10 @@
       } else {
         // No API available, just save to localStorage
         saveDraftToLocalStorage();
-        updateSaveStatus('draft', 'Saved to local storage (GitHub token required for auto-save)');
+        updateSaveStatus(
+          'draft',
+          'Saved to local storage (GitHub token required for auto-save)'
+        );
       }
     } catch (error) {
       console.warn('Auto-save failed:', error);
@@ -296,10 +310,10 @@
         },
         body: JSON.stringify({
           path: path,
-          content: content
-        })
+          content: content,
+        }),
       });
-      
+
       if (response.ok) {
         lastSavedContent = content;
         currentPostPath = path;
@@ -321,7 +335,7 @@
 
     const repoOwner = localStorage.getItem('github-owner');
     const repoName = localStorage.getItem('github-repo');
-    
+
     if (!repoOwner || !repoName) {
       // Fallback to local API if GitHub repo info is not set
       await autoSaveToLocalAPI(path, content);
@@ -336,9 +350,9 @@
           `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`,
           {
             headers: {
-              'Authorization': `token ${githubToken}`,
-              'Accept': 'application/vnd.github.v3+json'
-            }
+              Authorization: `token ${githubToken}`,
+              Accept: 'application/vnd.github.v3+json',
+            },
           }
         );
         if (getResponse.ok) {
@@ -355,15 +369,17 @@
         {
           method: 'PUT',
           headers: {
-            'Authorization': `token ${githubToken}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
+            Authorization: `token ${githubToken}`,
+            Accept: 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            message: sha ? `Auto-save: Update ${path}` : `Auto-save: Create ${path}`,
+            message: sha
+              ? `Auto-save: Update ${path}`
+              : `Auto-save: Create ${path}`,
             content: btoa(unescape(encodeURIComponent(content))),
-            sha: sha
-          })
+            sha: sha,
+          }),
         }
       );
 
@@ -417,16 +433,18 @@
   function updateSaveStatus(type, message) {
     const statusElement = document.getElementById('github-status');
     if (!statusElement) return;
-    
+
     const icons = {
-      'saving': '<i class="fas fa-spinner fa-spin"></i>',
-      'success': '<i class="fas fa-check-circle text-success"></i>',
-      'error': '<i class="fas fa-exclamation-circle text-danger"></i>',
-      'draft': '<i class="fas fa-save text-info"></i>'
+      saving: '<i class="fas fa-spinner fa-spin"></i>',
+      success: '<i class="fas fa-check-circle text-success"></i>',
+      error: '<i class="fas fa-exclamation-circle text-danger"></i>',
+      draft: '<i class="fas fa-save text-info"></i>',
     };
-    
-    statusElement.innerHTML = `${icons[type] || ''} <span class="ms-1">${message}</span>`;
-    
+
+    statusElement.innerHTML = `${
+      icons[type] || ''
+    } <span class="ms-1">${message}</span>`;
+
     // Clear status after 3 seconds for success/draft
     if (type === 'success' || type === 'draft') {
       setTimeout(function () {
@@ -446,7 +464,7 @@
     const rawText =
       typeof sourceEl.value === 'string'
         ? sourceEl.value
-        : (sourceEl.textContent || '');
+        : sourceEl.textContent || '';
 
     const markdown = rawText;
 
@@ -457,31 +475,43 @@
         // Protect math expressions before parsing
         const mathPlaceholders = [];
         let placeholderIndex = 0;
-        
+
         // Use HTML comments as placeholders (they won't be escaped)
         const generatePlaceholder = (type, index) => {
           return `<!--MATH_${type}_${index}-->`;
         };
-        
+
         // Protect block math ($$...$$) - must match across newlines
-        let protectedMarkdown = markdown.replace(/\$\$[\s\S]*?\$\$/g, function(match) {
-          const placeholder = generatePlaceholder('BLOCK', placeholderIndex);
-          mathPlaceholders.push({ placeholder: placeholder, expression: match });
-          placeholderIndex++;
-          return placeholder;
-        });
-        
+        let protectedMarkdown = markdown.replace(
+          /\$\$[\s\S]*?\$\$/g,
+          function (match) {
+            const placeholder = generatePlaceholder('BLOCK', placeholderIndex);
+            mathPlaceholders.push({
+              placeholder: placeholder,
+              expression: match,
+            });
+            placeholderIndex++;
+            return placeholder;
+          }
+        );
+
         // Protect inline math ($...$) - but not $$...$$
-        protectedMarkdown = protectedMarkdown.replace(/(?<!\$)\$([^\$\n]+?)\$(?!\$)/g, function(match) {
-          const placeholder = generatePlaceholder('INLINE', placeholderIndex);
-          mathPlaceholders.push({ placeholder: placeholder, expression: match });
-          placeholderIndex++;
-          return placeholder;
-        });
-        
+        protectedMarkdown = protectedMarkdown.replace(
+          /(?<!\$)\$([^\$\n]+?)\$(?!\$)/g,
+          function (match) {
+            const placeholder = generatePlaceholder('INLINE', placeholderIndex);
+            mathPlaceholders.push({
+              placeholder: placeholder,
+              expression: match,
+            });
+            placeholderIndex++;
+            return placeholder;
+          }
+        );
+
         // Parse markdown
         html = marked.parse(protectedMarkdown);
-        
+
         // Restore math expressions from HTML comments
         for (let i = 0; i < mathPlaceholders.length; i++) {
           const math = mathPlaceholders[i];
@@ -509,7 +539,7 @@
 
     // Apply syntax highlighting to code blocks
     if (typeof hljs !== 'undefined') {
-      preview.querySelectorAll('pre code').forEach(function(block) {
+      preview.querySelectorAll('pre code').forEach(function (block) {
         // Only highlight if not already highlighted
         if (!block.classList.contains('hljs')) {
           hljs.highlightElement(block);
@@ -519,7 +549,7 @@
 
     // MathJax rendering if available
     if (window.MathJax && window.MathJax.typesetPromise) {
-      setTimeout(function() {
+      setTimeout(function () {
         // Clear previous MathJax rendering
         if (window.MathJax.startup && window.MathJax.startup.document) {
           window.MathJax.startup.document.state(0);
@@ -540,7 +570,7 @@
     const text =
       typeof sourceEl.value === 'string'
         ? sourceEl.value
-        : (sourceEl.textContent || '');
+        : sourceEl.textContent || '';
     const words = text.trim() ? text.trim().split(/\s+/).length : 0;
     const characters = text.length;
     statsElement.textContent = `${words} words, ${characters} characters`;
@@ -551,9 +581,7 @@
     if (!el) return;
 
     const current =
-      typeof el.value === 'string'
-        ? el.value
-        : (el.textContent || '');
+      typeof el.value === 'string' ? el.value : el.textContent || '';
     const value = String(current);
     const start =
       typeof el.selectionStart === 'number' && el.selectionStart >= 0
@@ -570,7 +598,11 @@
     const selected = value.substring(s, e);
     const newValue =
       value.substring(0, s) + before + selected + after + value.substring(e);
-    if (typeof el.value === 'string' || el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+    if (
+      typeof el.value === 'string' ||
+      el.tagName === 'TEXTAREA' ||
+      el.tagName === 'INPUT'
+    ) {
       el.value = newValue;
     } else {
       el.textContent = newValue;
@@ -608,15 +640,15 @@
 
   function setDefaultTemplate() {
     if (!editor) return;
-    
+
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0];
     const timeStr = today.toTimeString().split(' ')[0].substring(0, 5); // HH:MM format
     const dateTimeStr = `${dateStr} ${timeStr}:00`;
-    
+
     // Get selected category for default categories
     const defaultCategory = selectedCategory ? `[${selectedCategory}]` : '[]';
-    
+
     editor.value =
       `---\n` +
       `title: \n` +
@@ -627,12 +659,12 @@
       `math: false\n` +
       `mermaid: false\n` +
       `comments: true\n` +
-      `image: \n` +
-      `    path: \n` +
-      `    lqip: \n` +
-      `    alt: \n` +
+      `# image: \n` +
+      `#     path: \n` +
+      `#     lqip: \n` +
+      `#     alt: \n` +
       `---\n\n`;
-    
+
     lastSavedContent = editor.value;
     updatePreview();
     updateStats();
@@ -640,19 +672,23 @@
 
   function newPost() {
     if (!editor) return;
-    if (editor.value && editor.value.trim() && editor.value !== lastSavedContent) {
     if (
-      !confirm(
-          'Do you want to start a new post? The current content will be saved automatically.'
-      )
+      editor.value &&
+      editor.value.trim() &&
+      editor.value !== lastSavedContent
     ) {
-      return;
-    }
+      if (
+        !confirm(
+          'Do you want to start a new post? The current content will be saved automatically.'
+        )
+      ) {
+        return;
+      }
       saveDraft();
     }
-    
+
     setDefaultTemplate();
-    
+
     const pathInput = document.getElementById('post-path');
     const titleInput = document.getElementById('post-title');
     if (pathInput) pathInput.value = '';
@@ -670,18 +706,22 @@
   async function loadPost() {
     const pathInput = document.getElementById('post-path');
     const path = pathInput?.value?.trim();
-    
+
     if (!path) {
       // Show post list modal or prompt
       try {
         const response = await fetch(getApiUrl('/api/posts'));
         if (!response.ok) throw new Error('Failed to fetch posts');
         const data = await response.json();
-        
+
         if (data.posts && data.posts.length > 0) {
-          const postList = data.posts.map((p, i) => `${i + 1}. ${p.name} (${p.path})`).join('\n');
-          const selected = prompt(`Select a post:\n\n${postList}\n\nEnter the number or path:`);
-          
+          const postList = data.posts
+            .map((p, i) => `${i + 1}. ${p.name} (${p.path})`)
+            .join('\n');
+          const selected = prompt(
+            `Select a post:\n\n${postList}\n\nEnter the number or path:`
+          );
+
           if (selected) {
             const index = parseInt(selected) - 1;
             if (index >= 0 && index < data.posts.length) {
@@ -695,7 +735,9 @@
         }
       } catch (error) {
         console.error('Load posts error:', error);
-        const manualPath = prompt('Enter the post path (e.g. _posts/2025-12-01-example.md):');
+        const manualPath = prompt(
+          'Enter the post path (e.g. _posts/2025-12-01-example.md):'
+        );
         if (manualPath) {
           await loadPostFromPath(manualPath);
         }
@@ -707,14 +749,16 @@
 
   async function loadPostFromPath(path) {
     if (!path) return;
-    
+
     updateSaveStatus('saving', 'Loading...');
-    
+
     try {
       // Try local API first (development)
       if (isLocalApiAvailable()) {
         try {
-          const response = await fetch(getApiUrl(`/api/load?path=${encodeURIComponent(path)}`));
+          const response = await fetch(
+            getApiUrl(`/api/load?path=${encodeURIComponent(path)}`)
+          );
           if (response.ok) {
             const data = await response.json();
             await processLoadedPost(data, path);
@@ -724,16 +768,18 @@
           console.warn('Local API failed, trying GitHub API...', error);
         }
       }
-      
+
       // Use GitHub API (production or fallback)
       const githubToken = localStorage.getItem('github-token');
       const repoOwner = localStorage.getItem('github-owner');
       const repoName = localStorage.getItem('github-repo');
-      
+
       if (githubToken && repoOwner && repoName) {
         await loadPostFromGitHub(path, repoOwner, repoName, githubToken);
       } else {
-        throw new Error('GitHub token not set. Please set up GitHub token first.');
+        throw new Error(
+          'GitHub token not set. Please set up GitHub token first.'
+        );
       }
     } catch (error) {
       console.error('Load post error:', error);
@@ -747,21 +793,21 @@
       `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`,
       {
         headers: {
-          'Authorization': `token ${githubToken}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
+          Authorization: `token ${githubToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
       }
     );
-    
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || 'Failed to load post from GitHub');
     }
-    
+
     const fileData = await response.json();
     // Decode base64 content
     const content = decodeURIComponent(escape(atob(fileData.content)));
-    
+
     // Extract title from front matter
     let title = '';
     if (content.startsWith('---')) {
@@ -774,7 +820,7 @@
         }
       }
     }
-    
+
     await processLoadedPost({ content, title }, path);
   }
 
@@ -783,26 +829,28 @@
       editor.value = data.content || '';
       lastSavedContent = editor.value;
       currentPostPath = path;
-      
+
       // Parse path to extract category and subcategory
       // Format: _posts/category/subcategory/date-title.md
-      const pathMatch = path.match(/^_posts\/([^\/]+)(?:\/([^\/]+))?\/([^\/]+)\.md$/);
+      const pathMatch = path.match(
+        /^_posts\/([^\/]+)(?:\/([^\/]+))?\/([^\/]+)\.md$/
+      );
       if (pathMatch) {
         selectedCategory = pathMatch[1];
         selectedSubcategory = pathMatch[2] || null;
         updateCategoryDisplay();
       }
-      
+
       const pathInput = document.getElementById('post-path');
       const titleInput = document.getElementById('post-title');
       if (pathInput) pathInput.value = path;
       if (titleInput && data.title) titleInput.value = data.title;
-      
-    updatePreview();
-    updateStats();
+
+      updatePreview();
+      updateStats();
       updateSaveStatus('success', 'Post loaded successfully');
       clearDraft();
-      
+
       // Refresh category tree to show selection
       renderCategoryTree();
     }
@@ -814,21 +862,21 @@
       toggleCategorySelector();
       return;
     }
-    
+
     const pathInput = document.getElementById('post-path');
     let path = pathInput?.value?.trim();
-    
+
     // Generate path if not set
     if (!path) {
       updatePostPath();
       path = pathInput?.value?.trim();
-  }
+    }
 
     if (!path) {
       alert('Please select a category and enter a post title.');
       return;
     }
-    
+
     if (!editor || !editor.value) {
       alert('There is no content to save.');
       return;
@@ -836,21 +884,25 @@
 
     // Check if GitHub token is set
     const githubToken = localStorage.getItem('github-token');
-    
+
     // In production, only GitHub API is available
     if (!IS_DEVELOPMENT) {
       if (!githubToken) {
-        alert('GitHub token is required in production. Please set up GitHub token first.');
+        alert(
+          'GitHub token is required in production. Please set up GitHub token first.'
+        );
         setupGitHubToken();
         return;
       }
       await saveToGitHub(path, editor.value);
       return;
     }
-    
+
     // In development, choose between GitHub and local API
-    const useGitHub = githubToken && confirm('Do you want to save to GitHub? (Cancel to use local API)');
-    
+    const useGitHub =
+      githubToken &&
+      confirm('Do you want to save to GitHub? (Cancel to use local API)');
+
     if (useGitHub) {
       await saveToGitHub(path, editor.value);
     } else {
@@ -860,11 +912,13 @@
 
   async function saveToLocalAPI(path, content) {
     if (!isLocalApiAvailable()) {
-      throw new Error('Local API not available. Please use GitHub API in production.');
+      throw new Error(
+        'Local API not available. Please use GitHub API in production.'
+      );
     }
-    
+
     updateSaveStatus('saving', 'Saving...');
-    
+
     try {
       const response = await fetch(getApiUrl('/api/save'), {
         method: 'POST',
@@ -873,21 +927,21 @@
         },
         body: JSON.stringify({
           path: path,
-          content: content
-        })
+          content: content,
+        }),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Failed to save');
       }
-      
+
       const data = await response.json();
       lastSavedContent = content;
       currentPostPath = path;
       clearDraft();
       updateSaveStatus('success', 'Saved successfully');
-      
+
       // Update path input if it was empty
       const pathInput = document.getElementById('post-path');
       if (pathInput && !pathInput.value) {
@@ -896,7 +950,9 @@
     } catch (error) {
       console.error('Save error:', error);
       updateSaveStatus('error', `Failed to save: ${error.message}`);
-      alert(`Failed to save: ${error.message}\n\nCheck if the local API server is running (npm start in api/)`);
+      alert(
+        `Failed to save: ${error.message}\n\nCheck if the local API server is running (npm start in api/)`
+      );
     }
   }
 
@@ -912,9 +968,11 @@
     const repoMatch = window.location.hostname.match(/github\.io/);
     let repoOwner = localStorage.getItem('github-owner');
     let repoName = localStorage.getItem('github-repo');
-    
+
     if (!repoOwner || !repoName) {
-      const repoInfo = prompt('Enter the GitHub repository information:\nFormat: owner/repo\nExample: username/taeylog');
+      const repoInfo = prompt(
+        'Enter the GitHub repository information:\nFormat: owner/repo\nExample: username/taeylog'
+      );
       if (!repoInfo) return;
       const parts = repoInfo.split('/');
       if (parts.length !== 2) {
@@ -937,9 +995,9 @@
           `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`,
           {
             headers: {
-              'Authorization': `token ${githubToken}`,
-              'Accept': 'application/vnd.github.v3+json'
-            }
+              Authorization: `token ${githubToken}`,
+              Accept: 'application/vnd.github.v3+json',
+            },
           }
         );
         if (getResponse.ok) {
@@ -956,15 +1014,15 @@
         {
           method: 'PUT',
           headers: {
-            'Authorization': `token ${githubToken}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
+            Authorization: `token ${githubToken}`,
+            Accept: 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             message: sha ? `Update ${path}` : `Create ${path}`,
             content: btoa(unescape(encodeURIComponent(content))),
-            sha: sha
-          })
+            sha: sha,
+          }),
         }
       );
 
@@ -988,18 +1046,22 @@
     const currentToken = localStorage.getItem('github-token');
     const token = prompt(
       `Enter your GitHub Personal Access Token:\n\n` +
-      `Create token: https://github.com/settings/tokens\n` +
-      `Required permission: repo (full repository access)\n\n` +
-      (currentToken ? `Current token: ${currentToken.substring(0, 10)}...` : 'Token is not set.'),
+        `Create token: https://github.com/settings/tokens\n` +
+        `Required permission: repo (full repository access)\n\n` +
+        (currentToken
+          ? `Current token: ${currentToken.substring(0, 10)}...`
+          : 'Token is not set.'),
       currentToken || ''
     );
-    
+
     if (token) {
       localStorage.setItem('github-token', token);
       alert('GitHub token saved.');
-      
+
       // Also ask for repo info
-      const repoInfo = prompt('Enter the GitHub repository information:\nFormat: owner/repo\nExample: username/taeylog');
+      const repoInfo = prompt(
+        'Enter the GitHub repository information:\nFormat: owner/repo\nExample: username/taeylog'
+      );
       if (repoInfo) {
         const parts = repoInfo.split('/');
         if (parts.length === 2) {
@@ -1024,9 +1086,9 @@
         }
       } catch (error) {
         console.warn('Local API not available, trying GitHub API...', error);
-  }
+      }
     }
-    
+
     // Fallback to GitHub API or local posts
     await loadCategoriesFromGitHub();
   }
@@ -1036,7 +1098,7 @@
     const githubToken = localStorage.getItem('github-token');
     const repoOwner = localStorage.getItem('github-owner');
     const repoName = localStorage.getItem('github-repo');
-    
+
     // Try GitHub API if token is available
     if (githubToken && repoOwner && repoName) {
       try {
@@ -1046,7 +1108,7 @@
         console.warn('Failed to load categories from GitHub API:', error);
       }
     }
-    
+
     // Fallback: Try local API posts endpoint (development only)
     if (isLocalApiAvailable()) {
       try {
@@ -1056,19 +1118,19 @@
         console.warn('Failed to load categories from local API:', error);
       }
     }
-    
+
     // Last resort: Show message
     const treeEl = document.getElementById('category-tree');
     if (treeEl) {
       if (!githubToken) {
         treeEl.innerHTML = `<div class="text-info text-center p-3">
-          <i class="fas fa-info-circle"></i> 
+          <i class="fas fa-info-circle"></i>
           <div class="mt-2">Please set up GitHub token to load categories.</div>
           <div class="mt-2"><button class="btn btn-sm btn-primary" onclick="setupGitHubToken()">Setup GitHub</button></div>
         </div>`;
       } else {
         treeEl.innerHTML = `<div class="text-warning text-center p-3">
-          <i class="fas fa-exclamation-triangle"></i> 
+          <i class="fas fa-exclamation-triangle"></i>
           <div class="mt-2">Failed to load categories. You can still create new categories manually.</div>
         </div>`;
       }
@@ -1082,43 +1144,45 @@
       `https://api.github.com/repos/${repoOwner}/${repoName}/contents/_posts`,
       {
         headers: {
-          'Authorization': `token ${githubToken}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
+          Authorization: `token ${githubToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
       }
     );
-    
+
     if (!response.ok) {
       throw new Error('Failed to fetch from GitHub API');
     }
-    
+
     const entries = await response.json();
     const categoriesMap = new Map();
-    
+
     // Recursively process directories
     async function processEntry(entry, parentPath = '') {
       if (entry.type === 'dir') {
         const categoryName = entry.name;
-        const categoryPath = parentPath ? `${parentPath}/${categoryName}` : categoryName;
-        
+        const categoryPath = parentPath
+          ? `${parentPath}/${categoryName}`
+          : categoryName;
+
         if (!categoriesMap.has(categoryName)) {
           categoriesMap.set(categoryName, {
             name: categoryName,
-            subcategories: []
+            subcategories: [],
           });
         }
-        
+
         // Get subdirectories
         const subResponse = await fetch(
           `https://api.github.com/repos/${repoOwner}/${repoName}/contents/_posts/${categoryPath}`,
           {
             headers: {
-              'Authorization': `token ${githubToken}`,
-              'Accept': 'application/vnd.github.v3+json'
-            }
+              Authorization: `token ${githubToken}`,
+              Accept: 'application/vnd.github.v3+json',
+            },
           }
         );
-        
+
         if (subResponse.ok) {
           const subEntries = await subResponse.json();
           for (const subEntry of subEntries) {
@@ -1133,21 +1197,21 @@
         }
       }
     }
-    
+
     // Process all top-level directories
     for (const entry of entries) {
       if (entry.type === 'dir') {
         await processEntry(entry);
       }
     }
-    
+
     categoriesData = Array.from(categoriesMap.values())
-      .map(cat => ({
+      .map((cat) => ({
         name: cat.name,
-        subcategories: cat.subcategories.sort()
+        subcategories: cat.subcategories.sort(),
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
-    
+
     renderCategoryTree();
   }
 
@@ -1158,24 +1222,24 @@
       throw new Error('Failed to load posts');
     }
     const data = await response.json();
-    
+
     // Extract categories from post paths
     const categoriesMap = new Map();
     if (data.posts) {
-      data.posts.forEach(post => {
+      data.posts.forEach((post) => {
         // Parse path: _posts/category/subcategory/date-title.md
         const match = post.path.match(/^_posts\/([^\/]+)(?:\/([^\/]+))?\//);
         if (match) {
           const categoryName = match[1];
           const subcategoryName = match[2];
-          
+
           if (!categoriesMap.has(categoryName)) {
             categoriesMap.set(categoryName, {
               name: categoryName,
-              subcategories: []
+              subcategories: [],
             });
           }
-          
+
           if (subcategoryName) {
             const category = categoriesMap.get(categoryName);
             if (!category.subcategories.includes(subcategoryName)) {
@@ -1185,14 +1249,14 @@
         }
       });
     }
-    
+
     categoriesData = Array.from(categoriesMap.values())
-      .map(cat => ({
+      .map((cat) => ({
         name: cat.name,
-        subcategories: cat.subcategories.sort()
+        subcategories: cat.subcategories.sort(),
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
-    
+
     renderCategoryTree();
   }
 
@@ -1201,44 +1265,57 @@
     if (!treeEl) return;
 
     if (categoriesData.length === 0) {
-      treeEl.innerHTML = '<div class="text-muted text-center p-3">No categories found</div>';
+      treeEl.innerHTML =
+        '<div class="text-muted text-center p-3">No categories found</div>';
       return;
     }
 
     const filter = filterText.toLowerCase();
     let html = '<ul class="category-list">';
-    
-    categoriesData.forEach(category => {
+
+    categoriesData.forEach((category) => {
       const categoryMatch = category.name.toLowerCase().includes(filter);
-      const subcategoryMatches = category.subcategories.filter(sub => 
+      const subcategoryMatches = category.subcategories.filter((sub) =>
         sub.toLowerCase().includes(filter)
       );
-      
+
       if (!categoryMatch && subcategoryMatches.length === 0) {
         return; // Skip this category if it doesn't match filter
       }
 
       html += `<li class="category-item">
-        <div class="category-header" onclick="toggleCategory('${category.name}')">
-          <i class="fas fa-chevron-right category-arrow" id="arrow-${category.name}"></i>
+        <div class="category-header" onclick="toggleCategory('${
+          category.name
+        }')">
+          <i class="fas fa-chevron-right category-arrow" id="arrow-${
+            category.name
+          }"></i>
           <i class="fas fa-folder"></i>
-          <span class="category-name" onclick="event.stopPropagation(); selectCategory('${category.name}')">${escapeHtml(category.name)}</span>
+          <span class="category-name" onclick="event.stopPropagation(); selectCategory('${
+            category.name
+          }')">${escapeHtml(category.name)}</span>
         </div>
-        <ul class="subcategory-list" id="subcat-${category.name}" style="display: none;">`;
-      
-      category.subcategories.forEach(subcategory => {
+        <ul class="subcategory-list" id="subcat-${
+          category.name
+        }" style="display: none;">`;
+
+      category.subcategories.forEach((subcategory) => {
         if (!filter || subcategory.toLowerCase().includes(filter)) {
-          const isSelected = selectedCategory === category.name && selectedSubcategory === subcategory;
-          html += `<li class="subcategory-item ${isSelected ? 'selected' : ''}" onclick="selectSubcategory('${category.name}', '${subcategory}')">
+          const isSelected =
+            selectedCategory === category.name &&
+            selectedSubcategory === subcategory;
+          html += `<li class="subcategory-item ${
+            isSelected ? 'selected' : ''
+          }" onclick="selectSubcategory('${category.name}', '${subcategory}')">
             <i class="fas fa-folder-open"></i>
             <span>${escapeHtml(subcategory)}</span>
           </li>`;
         }
       });
-      
+
       html += '</ul></li>';
     });
-    
+
     html += '</ul>';
     treeEl.innerHTML = html;
 
@@ -1251,11 +1328,11 @@
   function toggleCategory(categoryName, forceOpen = false) {
     const subcatList = document.getElementById(`subcat-${categoryName}`);
     const arrow = document.getElementById(`arrow-${categoryName}`);
-    
+
     if (!subcatList || !arrow) return;
-    
+
     const isOpen = subcatList.style.display !== 'none';
-    
+
     if (forceOpen || !isOpen) {
       subcatList.style.display = 'block';
       arrow.classList.remove('fa-chevron-right');
@@ -1286,7 +1363,7 @@
   function updateCategoryDisplay() {
     const displayEl = document.getElementById('category-display');
     if (!displayEl) return;
-    
+
     if (selectedSubcategory) {
       displayEl.textContent = `${selectedCategory} / ${selectedSubcategory}`;
     } else if (selectedCategory) {
@@ -1305,7 +1382,7 @@
 
     const titleInput = document.getElementById('post-title');
     const title = titleInput?.value?.trim() || '';
-    
+
     // Generate filename from title or use date
     let filename = '';
     if (title) {
@@ -1317,7 +1394,7 @@
         .replace(/-+/g, '-')
         .replace(/^-|-$/g, '');
     }
-    
+
     if (!filename) {
       const today = new Date().toISOString().split('T')[0];
       filename = `${today}-post`;
@@ -1340,10 +1417,10 @@
   function toggleCategorySelector() {
     const selector = document.getElementById('category-selector');
     if (!selector) return;
-    
+
     const isVisible = selector.style.display !== 'none';
     selector.style.display = isVisible ? 'none' : 'block';
-    
+
     if (!isVisible && categoriesData.length === 0) {
       loadCategories();
     }
@@ -1356,32 +1433,37 @@
   function addNewCategory() {
     const categoryName = prompt('Enter new category name:');
     if (!categoryName || !categoryName.trim()) return;
-    
-    const subcategoryName = prompt('Enter subcategory name (optional, leave empty for no subcategory):');
-    
+
+    const subcategoryName = prompt(
+      'Enter subcategory name (optional, leave empty for no subcategory):'
+    );
+
     selectedCategory = categoryName.trim();
     selectedSubcategory = subcategoryName?.trim() || null;
-    
+
     // Add to categories data if not exists
-    let category = categoriesData.find(c => c.name === selectedCategory);
+    let category = categoriesData.find((c) => c.name === selectedCategory);
     if (!category) {
       category = {
         name: selectedCategory,
-        subcategories: []
+        subcategories: [],
       };
       categoriesData.push(category);
       categoriesData.sort((a, b) => a.name.localeCompare(b.name));
     }
-    
-    if (selectedSubcategory && !category.subcategories.includes(selectedSubcategory)) {
+
+    if (
+      selectedSubcategory &&
+      !category.subcategories.includes(selectedSubcategory)
+    ) {
       category.subcategories.push(selectedSubcategory);
       category.subcategories.sort();
     }
-    
+
     updateCategoryDisplay();
     updatePostPath();
     renderCategoryTree();
-    
+
     // Close selector
     document.getElementById('category-selector').style.display = 'none';
   }
@@ -1393,10 +1475,10 @@
   }
 
   // Listen to title input changes to update path
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const titleInput = document.getElementById('post-title');
     if (titleInput) {
-      titleInput.addEventListener('input', function() {
+      titleInput.addEventListener('input', function () {
         if (selectedCategory) {
           updatePostPath();
         }

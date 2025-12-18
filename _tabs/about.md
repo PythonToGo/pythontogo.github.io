@@ -14,6 +14,20 @@ h1.page-title {
 
 <link rel="stylesheet" href="{{ '/assets/css/about-slider.css' | relative_url }}">
 
+<div class="section-nav-bookmark">
+  <div class="section-nav-buttons">
+    <button class="section-nav-btn" data-slide="0" data-icon="👋">Intro</button>
+    <button class="section-nav-btn" data-slide="1" data-icon="📚">Education</button>
+    <button class="section-nav-btn" data-slide="2" data-icon="💻">Skills</button>
+    <button class="section-nav-btn" data-slide="3" data-icon="💼">Experience</button>
+    <button class="section-nav-btn" data-slide="4" data-icon="🚀">Research</button>
+    <button class="section-nav-btn" data-slide="5" data-icon="🛠">Projects</button>
+    <button class="section-nav-btn" data-slide="6" data-icon="🤝">Social</button>
+    <button class="section-nav-btn" data-slide="7" data-icon="🌐">Languages</button>
+    <button class="section-nav-btn" data-slide="8" data-icon="🎨">Hobby</button>
+  </div>
+</div>
+
 <div class="about-slider-container">
   <button class="about-slider-nav prev" onclick="changeSlide(-1)" aria-label="Previous section">
     <i class="fas fa-chevron-left"></i>
