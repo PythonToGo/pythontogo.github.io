@@ -36,6 +36,9 @@ order: 3
       <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('![', '](image-url)')" title="Image">
         <i class="fas fa-image"></i>
       </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('<div class=\"pdf-viewer-container\" data-pdf=\"', '\"></div>')" title="PDF Viewer (all pages)">
+        <i class="fas fa-file-pdf"></i> PDF
+      </button>
       <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('$', '$')" title="Inline Math">
         <i class="fas fa-function"></i> $x$
       </button>
@@ -161,6 +164,9 @@ order: 3
   };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- PDF Viewer -->
+<link rel="stylesheet" href="{{ '/assets/css/pdf-viewer.css' | relative_url }}">
+<script src="{{ '/assets/js/pdf-viewer.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/js/github-oauth.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/markdown-editor.js' | relative_url }}"></script>
 

@@ -1,0 +1,112 @@
+/* PDF Viewer Styles */
+.pdf-viewer-container {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: var(--bs-light, #f8f9fa);
+  border-radius: 0.5rem;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.pdf-pages-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.pdf-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-page-container canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.pdf-page-label {
+  font-size: 0.875rem;
+  color: var(--bs-secondary, #6c757d);
+  font-weight: 500;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+}
+
+.pdf-info {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--bs-secondary, #6c757d);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.pdf-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--bs-secondary, #6c757d);
+}
+
+.pdf-loading::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--bs-border-color, #dee2e6);
+  border-top-color: var(--bs-primary, #0d6efd);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.pdf-error {
+  padding: 1rem;
+  background-color: var(--bs-danger-bg-subtle, #f8d7da);
+  color: var(--bs-danger-text-emphasis, #842029);
+  border: 1px solid var(--bs-danger-border-subtle, #f1aeb5);
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .pdf-viewer-container {
+    background-color: var(--bs-dark, #212529);
+    border-color: var(--bs-border-color, #495057);
+  }
+
+  .pdf-page-container {
+    background: var(--bs-dark, #212529);
+  }
+
+  .pdf-page-container canvas {
+    border-color: var(--bs-border-color, #495057);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .pdf-page-container {
+    padding: 0.5rem;
+  }
+
+  .pdf-page-container canvas {
+    width: 100%;
+  }
+}

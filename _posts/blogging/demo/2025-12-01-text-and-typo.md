@@ -196,6 +196,26 @@ The image below will toggle dark/light mode based on theme preference, notice it
 
 {% include embed/youtube.html id='Balreaj8Yqs' %}
 
+## PDF Viewer
+
+PDF 파일을 추가:
+
+### 사용 방법 1: HTML 태그 직접 사용
+
+```html
+<div class="pdf-viewer-container" data-pdf="/assets/pdf/posts/example.pdf"></div>
+```
+
+### 사용 방법 2: PDF 링크 사용
+
+마크다운에서 PDF 링크를 만들면 자동으로 모든 페이지가 표시됩니다:
+
+```markdown
+[PDF 문서 보기](/assets/pdf/posts/example.pdf)
+```
+
+**참고:** PDF 파일은 `assets/pdf/posts/` 폴더에 저장하는 것을 권장합니다.
+
 ## Reverse Footnote
 
 [^footnote]: The footnote source
