@@ -30,7 +30,7 @@
           <!-- .nav-item -->
         {% endif %}
       {% endfor %}
-      
+
       <!-- home (대문) -->
       <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
         <a href="{{ '/' | relative_url }}" class="nav-link">
@@ -38,7 +38,7 @@
           <span>HOME</span>
         </a>
       </li>
-      
+
       <!-- posts (카테고리 토글) -->
       <li class="nav-item post-toggle-item">
         <a href="#" class="nav-link post-toggle-link">
@@ -59,7 +59,7 @@
           </ul>
         </div>
       </li>
-      
+
       <!-- Category data for JavaScript -->
       <script type="application/json" id="categories-data">
       {% if site.categories.size > 0 %}
@@ -111,14 +111,14 @@
           {% endif %}
           {
             "name": "{{ parent_cat }}",
-            "path": "/categories/{{ parent_cat | downcase }}/",
+            "path": "/categories/{{ parent_cat | downcase | replace: ' ', '-' }}/",
             "children": [
               {% if has_children %}
                 {% assign sorted_children = parent_children | split: '|' | sort %}
                 {% for child_cat in sorted_children %}
                   {
                     "name": "{{ child_cat }}",
-                    "path": "/categories/{{ child_cat | downcase }}/"
+                    "path": "/categories/{{ child_cat | downcase | replace: ' ', '-' }}/"
                   }{% unless forloop.last %},{% endunless %}
                 {% endfor %}
               {% endif %}
@@ -136,13 +136,13 @@
       {% endif %}
       </script>
 
-      <!-- the real tabs (about 제외) -->
+      <!-- the real tabs (about, editor 빼고) -->
       {% assign categories_order = 0 %}
       {% for tab in site.tabs %}
         {% if tab.url == '/categories/' or tab.url contains 'categories' %}
           {% assign categories_order = tab.order %}
         {% endif %}
-        {% unless tab.parent == 'categories' or tab.url == '/about/' %}
+        {% unless tab.parent == 'categories' or tab.url == '/about/' or tab.url == '/editor/' %}
           <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
             <a href="{{ tab.url | relative_url }}" class="nav-link">
               <i class="fa-fw {{ tab.icon }}"></i>

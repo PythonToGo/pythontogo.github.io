@@ -15,7 +15,11 @@ layout: page
   </h1>
 
   {% comment %} Subcategories will be rendered by JavaScript {% endcomment %}
-  <div id="subcategories-container" class="subcategories mb-4 ps-lg-2" style="display: none;">
+  <div
+    id="subcategories-container"
+    class="subcategories mb-4 ps-lg-2"
+    style="display: none"
+  >
     <h3 class="h5 mb-3">
       <i class="fas fa-folder-tree fa-fw text-muted"></i>
       Subcategories
@@ -24,36 +28,36 @@ layout: page
       <!-- Subcategories will be inserted here by JavaScript -->
     </div>
   </div>
-  
+
   <!-- Subcategory data for JavaScript -->
   <script type="application/json" id="subcategories-data">
-  {
-    "parentCategory": "{{ page.title }}",
-    "subcategories": [
-      {% assign subcategories = '' %}
-      {% for post in site.posts %}
-        {% if post.categories.size > 1 and post.categories[0] == page.title %}
-          {% assign subcat = post.categories[1] %}
-          {% unless subcategories contains subcat %}
-            {% if subcategories == '' %}
-              {% assign subcategories = subcat %}
-            {% else %}
-              {% assign subcategories = subcategories | append: '|' | append: subcat %}
-            {% endif %}
-          {% endunless %}
-        {% endif %}
-      {% endfor %}
-      {% if subcategories != '' %}
-        {% assign subcat_list = subcategories | split: '|' | sort %}
-        {% for subcat in subcat_list %}
-          {
-            "name": "{{ subcat }}",
-            "path": "/categories/{{ subcat | downcase }}/"
-          }{% unless forloop.last %},{% endunless %}
+    {
+      "parentCategory": "{{ page.title }}",
+      "subcategories": [
+        {% assign subcategories = '' %}
+        {% for post in site.posts %}
+          {% if post.categories.size > 1 and post.categories[0] == page.title %}
+            {% assign subcat = post.categories[1] %}
+            {% unless subcategories contains subcat %}
+              {% if subcategories == '' %}
+                {% assign subcategories = subcat %}
+              {% else %}
+                {% assign subcategories = subcategories | append: '|' | append: subcat %}
+              {% endif %}
+            {% endunless %}
+          {% endif %}
         {% endfor %}
-      {% endif %}
-    ]
-  }
+        {% if subcategories != '' %}
+          {% assign subcat_list = subcategories | split: '|' | sort %}
+          {% for subcat in subcat_list %}
+            {
+              "name": "{{ subcat }}",
+              "path": "/categories/{{ subcat | downcase | replace: ' ', '-' }}/"
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        {% endif %}
+      ]
+    }
   </script>
 
   <ul class="content ps-0">

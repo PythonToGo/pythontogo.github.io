@@ -16,6 +16,6 @@ comments: true
 
 {% include pdf-viewer.html %}
 
-[PDF 문서 보기](/assets/img/posts/study-ds/ds1_linearization.pdf)
+[PDF로 보기](/assets/img/posts/study-ds/ds1_linearization.pdf)
 
 <div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-ds/ds1_linearization.pdf"></div>
