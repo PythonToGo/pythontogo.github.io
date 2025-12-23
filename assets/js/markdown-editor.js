@@ -537,6 +537,34 @@
 
     preview.innerHTML = html;
 
+    // Process PDF links - convert to PDF viewer containers
+    preview.querySelectorAll('a[href$=".pdf"]').forEach(function (link) {
+      const pdfUrl = link.getAttribute('href');
+      if (pdfUrl) {
+        // Create PDF viewer container
+        const container = document.createElement('div');
+        container.className = 'pdf-viewer-container';
+        container.setAttribute('data-pdf', pdfUrl);
+
+        // Insert container after the link
+        link.parentNode.insertBefore(container, link.nextSibling);
+
+        // Optionally hide or style the link
+        link.style.display = 'none';
+      }
+    });
+
+    // Process PDF containers with data-pdf attribute
+    if (window.renderPdf) {
+      preview.querySelectorAll('[data-pdf]').forEach(function (container) {
+        const pdfUrl = container.getAttribute('data-pdf');
+        if (pdfUrl && !container.hasAttribute('data-pdf-processed')) {
+          container.setAttribute('data-pdf-processed', 'true');
+          window.renderPdf(pdfUrl, container);
+        }
+      });
+    }
+
     // Apply syntax highlighting to code blocks
     if (typeof hljs !== 'undefined') {
       preview.querySelectorAll('pre code').forEach(function (block) {
