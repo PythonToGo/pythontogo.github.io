@@ -1,6 +1,6 @@
 ---
-title: Probabilistic Inference: MLE, MAP, and Bayesian Estimation
-description: MLE, MAP, and Bayesian Estimation
+title: "Probabilistic Inference: MLE, MAP, and Bayesian Estimation"
+description: "MLE, MAP, and Bayesian Estimation"
 date: 2025-12-28
 categories: [Study, Machine Learning]
 tags: [Machine Learning, Probabilistic Inference, MLE, MAP, Bayesian Estimation]
