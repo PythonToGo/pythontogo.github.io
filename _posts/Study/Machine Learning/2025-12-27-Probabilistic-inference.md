@@ -27,31 +27,31 @@ comments: true
 - **Identical distribution**: 모든 데이터가 동일한 파라미터 $$\theta$$를 가진다
 - **Independence**: 각 데이터 포인트는 서로 영향을 주지 않으므로 전체 확률을 개별 확률의 곱으로 나타낼 수 있다:
   $$
-  p(D|\theta) = \prod_{i=1}^N p(x_i | \theta)
+  p(D \mid \theta) = \prod_{i=1}^N p(x_i \mid \theta)
   $$
 
 ---
 
 ## 2. Maximum Likelihood Estimation (MLE)
 
-MLE는 관찰된 데이터의 발생 확률인 **Likelihood** $$p(D|\theta)$$를 최대화하는 파라미터 $$\theta$$를 찾는 기법이다.
+MLE는 관찰된 데이터의 발생 확률인 **Likelihood** $$p(D \mid \theta)$$를 최대화하는 파라미터 $$\theta$$를 찾는 기법이다.
 
 ### Objective
 
 $$
-\theta_{MLE} = \arg\max_{\theta} p(D|\theta)
+\theta_{MLE} = \arg\max_{\theta} p(D \mid \theta)
 $$
 
 ### Log-likelihood
 
-계산의 편의성과 수치적 안정성을 위해 Likelihood 대신, **Log-likelihood** $$\log p(D|\theta)$$를 최대화한다. Logarithm은 Monotonic transform이므로 최댓값의 위치를 보존하고, 곱셈을 덧셈으로 변환해서 더 쉬움.
+계산의 편의성과 수치적 안정성을 위해 Likelihood 대신, **Log-likelihood** $$\log p(D \mid \theta)$$를 최대화한다. Logarithm은 Monotonic transform이므로 최댓값의 위치를 보존하고, 곱셈을 덧셈으로 변환해서 더 쉬움.
 
 ### Coin Flip 예시
 
-동전 던지기에서 T와 H의 개수를 각각 $$|T|$$, $$|H|$$라 할 때:
+동전 던지기에서 T와 H의 개수를 각각 $$\lvert T \rvert$$, $$\lvert H\rvert$$라 할 때:
 
 $$
-\theta_{MLE} = \frac{|T|}{|T|+|H|}
+\theta_{MLE} = \frac{\left|T\right|}{\left|T\right|+\left|H\right|}
 $$
 
 ### Gaussian 예시
@@ -67,7 +67,7 @@ $$
 
 > 💡 **추가 설명**
 > 
-> MLE는 데이터가 적을 때 직관과 어긋나는 결과를 낼 수 있다. 예를 들어 동전을 두 번 던져 모두 H가 나오면, MLE는 뒷면이 나올 확률 $$\theta$$를 0으로 추정하지만, 이는 우리의 일반 상식 Prior belief와 다르다. 그래서 여기서 (아래에 나올) MAP는 데이터를 관찰하기 전에, 우리가 가진 주관적 믿음인 **Prior distribution** $$p(\theta)$$를 먼저 수학적으로 결합한다. 그리고, 단순히 데이터의 가능성 $$p(D|\theta)$$을 높이는 것보다는, **데이터가 주어졌을 때 파라미터가 실제로 존재할 확률**인 **Posterior distribution** $$p(\theta | D)$$를 고려한다. 아래 나오는 MAP의 목적은 Posterior distribution에서 가장 확률이 높은 값, 즉 최빈값(Mode)을 찾는 것이다. 
+> MLE는 데이터가 적을 때 직관과 어긋나는 결과를 낼 수 있다. 예를 들어 동전을 두 번 던져 모두 H가 나오면, MLE는 뒷면이 나올 확률 $$\theta$$를 0으로 추정하지만, 이는 우리의 일반 상식 Prior belief와 다르다. 그래서 여기서 (아래에 나올) MAP는 데이터를 관찰하기 전에, 우리가 가진 주관적 믿음인 **Prior distribution** $$p(\theta)$$를 먼저 수학적으로 결합한다. 그리고, 단순히 데이터의 가능성 $$p(D \mid \theta)$$을 높이는 것보다는, **데이터가 주어졌을 때 파라미터가 실제로 존재할 확률**인 **Posterior distribution** $$p(\theta \mid D)$$를 고려한다. 아래 나오는 MAP의 목적은 Posterior distribution에서 가장 확률이 높은 값, 즉 최빈값(Mode)을 찾는 것이다. 
 
 
 ## Bayesian Inference
@@ -78,15 +78,15 @@ Bayesian 관점에서 파라미터 $$\theta$$를 고정된 값이 아닌, 확률
 
 데이터를 관찰하기 전에, 파라미터에 대해 가지고 있는 주관적인 믿음을 의미한다.
 
-### Posterior Distribution $$p(\theta|D)$$
+### Posterior Distribution $$p(\theta \mid D)$$
 
 데이터를 관찰한 후 업데이트된 믿음이다. Bayes' Rule에 의해 다음과 같이 정의된다:
 
 $$
-p(\theta | D) = \frac{p(D|\theta)p(\theta)}{p(D)}
+p(\theta \mid D) = \frac{p(D \mid \theta)p(\theta)}{p(D)}
 $$
 
-- **Likelihood** $$p(D|\theta)$$: 데이터가 주어졌을 때 파라미터의 가능성
+- **Likelihood** $$p(D \mid \theta)$$: 데이터가 주어졌을 때 파라미터의 가능성
 - **Evidence** $$p(D)$$: Normalizing constant로, posterior distribution의 합이 1이 되도록 한다
 
 > ⚠️ **중요**: 관계식: Posterior $$\propto$$ Likelihood $$\times$$ Prior
@@ -100,7 +100,7 @@ MAP은 Posterior distribution을 최대화하는 파라미터 값을 찾는 방�
 ### Objective
 
 $$
-\theta_{MAP} = \arg\max_{\theta} p(\theta | D) = \arg\max_{\theta} [\log p(D|\theta) + \log p(\theta)]
+\theta_{MAP} = \arg\max_{\theta} p(\theta \mid D) = \arg\max_{\theta} [\log p(D \mid \theta) + \log p(\theta)]
 $$
 
 ### Prior의 영향
@@ -140,7 +140,7 @@ $$
 
 ### Gaussian 예시
 
-정규분포 Prior $$N(\mu| 0, \alpha^{-1})$$를 가질 때:
+정규분포 Prior $$N(\mu \mid 0, \alpha^{-1})$$를 가질 때:
 
 $$
 \mu_{MAP} = \frac{1}{N+\alpha} \sum_{i=1}^N x_i
@@ -173,7 +173,7 @@ Prior와 Posterior가 동일한 Family의 분포를 따를 때, 해당 Prior를 
 ### Definition
 
 $$
-p(x_{new} | D, a, b) = \int p(x_{new} | \theta) p(\theta | D, a, b) d\theta
+p(x_{new} \mid D, a, b) = \int p(x_{new} \mid \theta) p(\theta \mid D, a, b) d\theta
 $$
 
 ### Marginalization
@@ -189,7 +189,7 @@ $$
 
 | 구분 | Maximum Likelihood (MLE) | Maximum a Posteriori (MAP) | Fully Bayesian |
 |------|-------------------------|---------------------------|----------------|
-| 목표 | $$\max p(D|\theta)$$ | $$\max p(\theta|D)$$ | $$p(\theta|D)$$ 전체 추정 |
+| 목표 | $$\max p(D \mid \theta)$$ | $$\max p(\theta \mid D)$$ | $$p(\theta \mid D)$$ 전체 추정 |
 | 결과 | Point estimate | Point estimate | Full distribution |
 | Prior 사용 | 없음 (Uniform과 유사) | 사용 | 사용 |
 

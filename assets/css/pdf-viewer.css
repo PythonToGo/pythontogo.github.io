@@ -100,6 +100,62 @@
   }
 }
 
+/* Collapsible PDF Viewer */
+.pdf-collapsible {
+  margin: 2rem 0;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  background-color: var(--bs-light, #f8f9fa);
+  overflow: hidden;
+}
+
+.pdf-collapsible summary {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--bs-body-color, #212529);
+  background-color: var(--bs-light, #f8f9fa);
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s ease;
+}
+
+.pdf-collapsible summary:hover {
+  background-color: var(--bs-secondary-bg, #e9ecef);
+}
+
+.pdf-collapsible summary::marker {
+  display: none;
+  content: '';
+}
+
+.pdf-collapsible summary::-webkit-details-marker {
+  display: none;
+}
+
+.pdf-collapsible summary::after {
+  content: '▼';
+  font-size: 0.8rem;
+  color: var(--bs-secondary, #6c757d);
+  transition: transform 0.3s ease;
+  margin-left: 1rem;
+}
+
+.pdf-collapsible[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.pdf-collapsible .pdf-viewer-container {
+  margin: 0;
+  padding: 1.5rem;
+  border: none;
+  background-color: transparent;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .pdf-page-container {
@@ -108,5 +164,14 @@
 
   .pdf-page-container canvas {
     width: 100%;
+  }
+
+  .pdf-collapsible summary {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  .pdf-collapsible .pdf-viewer-container {
+    padding: 1rem;
   }
 }
