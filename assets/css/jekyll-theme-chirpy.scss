@@ -685,3 +685,38 @@
     max-width: 100%;
   }
 }
+
+/* Post featured image size control */
+/* Adjust the aspect ratio and size of post featured images */
+.post-image,
+img[src*="assets/img/posts"] {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* For social preview images (og:image) */
+/* Maintain 16:9 aspect ratio for better display */
+.post-image-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.post-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Alternative: Fixed height for post images */
+/* Uncomment and adjust if you prefer fixed height */
+/*
+.post-image {
+  max-height: 400px;
+  width: 100%;
+  object-fit: cover;
+}
+*/

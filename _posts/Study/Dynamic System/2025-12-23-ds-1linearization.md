@@ -4,7 +4,7 @@ description: Summary of State-Space Representations, Linearization, and Phase Po
 date: 2025-12-23
 categories: [Study, Dynamic System]
 tags: [Dynamic System, Linearization, Phase Portraits, Lyapunov, Stability]
-pin: true
+# pin: true
 math: true
 mermaid: true
 comments: true
