@@ -29,6 +29,6 @@ comments: true
 
 
 ## Lyapunov Stability
-[Ch1. Linearization](/assets/img/posts/study-ds/ds2_lyapunov-stability.pdf)
+[Ch2. Lyapunov Stability](/assets/img/posts/study-ds/ds2_lyapunov-stability.pdf)
 
 <div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-ds/ds2_lyapunov-stability.pdf"></div>

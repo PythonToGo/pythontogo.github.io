@@ -1,0 +1,168 @@
+/* Euler-Winkel Animation Styles */
+.euler-winkel-container {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: var(--bs-light, #f8f9fa);
+  border-radius: 0.5rem;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+}
+
+.euler-winkel-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 600px;
+  margin: 2rem 0;
+  padding: 0;
+  background: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.euler-winkel-canvas-wrapper canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Kardan-Winkel specific styles - smaller size */
+.kardan-winkel-canvas-wrapper {
+  max-width: 600px;
+  height: 450px;
+}
+
+.kardan-winkel-container .euler-winkel-controls {
+  max-width: 600px;
+}
+
+.kardan-winkel-container .euler-winkel-step-indicator {
+  max-width: 600px;
+}
+
+.euler-winkel-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--bs-secondary-bg, #e9ecef);
+  border-radius: 0.25rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.euler-winkel-control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.euler-winkel-control-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bs-body-color, #212529);
+}
+
+.euler-winkel-control-group input[type='range'] {
+  width: 100%;
+  max-width: 150px;
+}
+
+.euler-winkel-control-group .value-display {
+  font-size: 0.875rem;
+  color: var(--bs-secondary, #6c757d);
+  font-family: monospace;
+}
+
+.euler-winkel-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.euler-winkel-buttons button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.25rem;
+  background: var(--bs-primary, #0d6efd);
+  color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.euler-winkel-buttons button:hover {
+  background: var(--bs-primary-dark, #0a58ca);
+}
+
+.euler-winkel-buttons button:disabled {
+  background: var(--bs-secondary, #6c757d);
+  cursor: not-allowed;
+}
+
+.euler-winkel-step-indicator {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--bs-info-bg-subtle, #cff4fc);
+  border: 1px solid var(--bs-info-border-subtle, #b6effb);
+  border-radius: 0.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--bs-info-text-emphasis, #055160);
+  width: 100%;
+  max-width: 800px;
+}
+
+.euler-winkel-step-indicator strong {
+  font-size: 1rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .euler-winkel-container {
+    background-color: var(--bs-dark, #212529);
+    border-color: var(--bs-border-color, #495057);
+  }
+
+  .euler-winkel-canvas-wrapper {
+    background: var(--bs-dark, #212529);
+  }
+
+  .euler-winkel-controls {
+    background: var(--bs-secondary-bg, #343a40);
+  }
+
+  .euler-winkel-step-indicator {
+    background: var(--bs-info-bg-subtle, #002029);
+    border-color: var(--bs-info-border-subtle, #004085);
+    color: var(--bs-info-text-emphasis, #6edff6);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .euler-winkel-canvas-wrapper {
+    height: 500px;
+    max-width: 100%;
+  }
+
+  .euler-winkel-controls {
+    flex-direction: column;
+  }
+
+  .euler-winkel-control-group {
+    width: 100%;
+  }
+}

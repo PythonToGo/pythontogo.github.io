@@ -1,0 +1,68 @@
+<!-- Kardan-Winkel 3D Animation (x-y-z order) -->
+<link
+  rel="stylesheet"
+  href="{{ '/assets/css/euler-winkel-animation.css' | relative_url }}"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script
+  src="{{ '/assets/js/kardan-winkel-animation.js' | relative_url }}"
+  defer
+></script>
+
+<div
+  class="euler-winkel-container kardan-winkel-container"
+  id="kardan-winkel-animation"
+>
+  <div class="euler-winkel-canvas-wrapper kardan-winkel-canvas-wrapper"></div>
+
+  <div class="euler-winkel-controls">
+    <div class="euler-winkel-control-group">
+      <label for="alpha-slider">$\alpha$ (alpha)</label>
+      <input
+        type="range"
+        id="alpha-slider"
+        min="0"
+        max="360"
+        value="0"
+        step="1"
+      />
+      <span class="value-display" id="alpha-value">0°</span>
+    </div>
+
+    <div class="euler-winkel-control-group">
+      <label for="beta-slider">$\beta$ (beta)</label>
+      <input
+        type="range"
+        id="beta-slider"
+        min="0"
+        max="360"
+        value="0"
+        step="1"
+      />
+      <span class="value-display" id="beta-value">0°</span>
+    </div>
+
+    <div class="euler-winkel-control-group">
+      <label for="gamma-slider">$\gamma$ (gamma)</label>
+      <input
+        type="range"
+        id="gamma-slider"
+        min="0"
+        max="360"
+        value="0"
+        step="1"
+      />
+      <span class="value-display" id="gamma-value">0°</span>
+    </div>
+  </div>
+
+  <div class="euler-winkel-buttons">
+    <button id="play-animation">Play Animation</button>
+    <button id="step-animation">Step</button>
+    <button id="reset-animation">Reset</button>
+  </div>
+
+  <div class="euler-winkel-step-indicator kardan-winkel-step-indicator">
+    <strong>initial state</strong>
+  </div>
+</div>
