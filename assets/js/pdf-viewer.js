@@ -203,6 +203,84 @@
         renderPdf(pdfUrl, container);
       }
     });
+
+    // Process img tags with PDF sources (for home page preview images)
+    const pdfImages = Array.from(document.querySelectorAll('img[src$=".pdf"]'));
+    
+    // Process each PDF image, fetching page number from post if needed
+    pdfImages.forEach(async (img) => {
+      if (img.hasAttribute('data-pdf-processed')) return;
+      
+      const pdfUrl = img.getAttribute('src');
+      if (!pdfUrl) return;
+
+      // Mark as processed
+      img.setAttribute('data-pdf-processed', 'true');
+
+      // Get the parent container (usually .preview-img)
+      const parent = img.parentElement;
+      if (!parent) return;
+
+      // Try to find the post link to get the page number from the post page
+      let pageNumber = '1'; // default
+      const article = img.closest('article');
+      if (article) {
+        const postLink = article.querySelector('a[href^="/posts/"]');
+        if (postLink) {
+          const postUrl = postLink.getAttribute('href');
+          try {
+            // Fetch the post page to get the page number from the PDF viewer container
+            const response = await fetch(postUrl);
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const pdfContainer = doc.querySelector(`[data-pdf="${pdfUrl}"], [data-pdf*="${pdfUrl.split('/').pop()}"]`);
+            if (pdfContainer) {
+              const pageAttr = pdfContainer.getAttribute('data-page');
+              if (pageAttr) {
+                pageNumber = pageAttr;
+              }
+            }
+          } catch (error) {
+            console.warn('Could not fetch post page for page number:', error);
+            // Fall back to default page 1
+          }
+        }
+      }
+
+      // Check if parent already has pdf-viewer-container class
+      const isPreviewImg = parent.classList.contains('preview-img');
+      
+      // Create or use existing container
+      let container;
+      if (isPreviewImg && !parent.classList.contains('pdf-viewer-container')) {
+        // Replace the img with a PDF viewer container
+        container = document.createElement('div');
+        container.className = 'pdf-viewer-container preview-img';
+        container.setAttribute('data-pdf', pdfUrl);
+        container.setAttribute('data-page', pageNumber);
+        
+        // Copy style from parent if it exists
+        if (parent.style.cssText) {
+          container.style.cssText = parent.style.cssText;
+        }
+        
+        // Replace img with container
+        parent.replaceChild(container, img);
+      } else {
+        // Create new container next to the image
+        container = document.createElement('div');
+        container.className = 'pdf-viewer-container preview-img';
+        container.setAttribute('data-pdf', pdfUrl);
+        container.setAttribute('data-page', pageNumber);
+        
+        // Insert after the image
+        img.parentNode.insertBefore(container, img.nextSibling);
+      }
+
+      // Render the PDF
+      renderPdf(pdfUrl, container);
+    });
   }
 
   // Initialize when DOM is ready
