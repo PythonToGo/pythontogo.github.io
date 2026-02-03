@@ -11,7 +11,7 @@ mermaid: true
 comments: true
 image: 
 #     # type: pdf
-    path: assets/img/posts/study-dl/sgdfail.png
+    path: assets/img/posts/study-dl/saddle-con.png
 # <div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-ai/ch8.pdf" data-page="2"></div>
 #     # page: 7
 #     alt: 
