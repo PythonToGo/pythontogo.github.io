@@ -1,10 +1,14 @@
 // Simple API server for markdown editor
 // Run with: node api/server.js
 
+const path = require('path');
+// Load env from project root `.env`
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+
 const express = require('express');
 const fs = require('fs').promises;
-const path = require('path');
 const cors = require('cors');
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 const PORT = 3001;
@@ -14,8 +18,73 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
+// Supabase client for newsletter subscriptions
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+let supabase = null;
+if (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
+  supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  });
+}
+
 // Get project root directory (parent of api folder)
 const PROJECT_ROOT = path.resolve(__dirname, '..');
+
+// Newsletter subscribe endpoint
+app.post('/api/newsletter/subscribe', async (req, res) => {
+  try {
+    if (!supabase) {
+      return res.status(500).json({ error: 'Supabase is not configured on the server.' });
+    }
+
+    const { email, newsletter_type } = req.body || {};
+
+    if (!email || typeof email !== 'string') {
+      return res.status(400).json({ error: 'Valid email is required.' });
+    }
+
+    if (!newsletter_type || !['munich-daily', 'taeyai'].includes(newsletter_type)) {
+      return res.status(400).json({ error: 'Valid newsletter_type is required.' });
+    }
+
+    const trimmedEmail = email.trim().toLowerCase();
+
+    const { data, error } = await supabase
+      .from('newsletter_subscribers')
+      .upsert(
+        {
+          email: trimmedEmail,
+          newsletter_type,
+          unsubscribed_at: null
+        },
+        { onConflict: 'email,newsletter_type' }
+      )
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase subscribe error:', error);
+      return res.status(500).json({ error: 'Failed to save subscription.' });
+    }
+
+    return res.json({
+      success: true,
+      subscriber: {
+        id: data.id,
+        email: data.email,
+        newsletter_type: data.newsletter_type
+      }
+    });
+  } catch (err) {
+    console.error('Subscribe endpoint error:', err);
+    return res.status(500).json({ error: 'Unexpected error.' });
+  }
+});
 
 // Load file endpoint
 app.get('/api/load', async (req, res) => {
