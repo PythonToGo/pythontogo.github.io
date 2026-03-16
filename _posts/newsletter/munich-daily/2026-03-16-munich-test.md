@@ -2,6 +2,14 @@
 title: "Munich Daily 테스트 레터"
 date: 2026-03-16
 newsletter_type: "munich-daily"
+date: 2025-12-01 10:40:00 +0800
+categories: [newsletter]
+tags: []
+# pin: true
+math: true
+mermaid: true
+comments: true
+
 email_enabled: true
 email_subject: "[Munich Daily] 2026-03-16 테스트 레터"
 email_intro: "이 레터는 Munich Daily 이메일 발송 테스트용입니다."
