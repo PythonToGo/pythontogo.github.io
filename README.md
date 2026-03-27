@@ -1,47 +1,118 @@
-# PythonToGO Starter
-Check [![Hedge](https://pythontogo.github.io/)][mit]
+<div align="center">
 
+# PythonToGo
 
-<!-- # Chirpy Starter
+### The way to live like a hedgehog.
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+[![Live Site](https://img.shields.io/badge/Live%20Site-pythontogo.github.io-1f6feb?style=for-the-badge)](https://pythontogo.github.io)
+[![Jekyll](https://img.shields.io/badge/Jekyll-4.x-cc0000?style=for-the-badge&logo=jekyll)](https://jekyllrb.com)
+[![Theme](https://img.shields.io/badge/Theme-Chirpy-2ea44f?style=for-the-badge)](https://github.com/cotes2020/jekyll-theme-chirpy)
+[![License](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](./LICENSE)
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders
-`_data`, `_layouts`, `_includes`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file
-from the theme's gem. If you have ever installed this theme gem, you can use the command
-`bundle info --path jekyll-theme-chirpy` to locate these files.
+Personal study blog by **Taey**, built with **Jekyll** and the **Chirpy** theme.  
+Notes, experiments, and write-ups on **Python**, **Go**, **ML/DL**, **Dynamic Systems**, **Robotics**, and **AI**.
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being
-able to enjoy the out-of-the-box experience when using feature-rich themes.
+</div>
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your
-Jekyll site. The following is a list of targets:
+## Preview
 
-```shell
+- Live: https://pythontogo.github.io
+- Timezone: `Europe/Berlin`
+- Default language: `en`
+
+## Highlights
+
+| Area     | Summary                                                    |
+| -------- | ---------------------------------------------------------- |
+| Content  | Study notes, blog posts, quizzes, PDFs, and custom visuals |
+| Platform | Jekyll site powered by `jekyll-theme-chirpy`               |
+| Hosting  | GitHub Pages with automated deployment                     |
+| Focus    | Consistent long-form technical learning archive            |
+
+## What Lives Here
+
+This repository is more than a simple blog starter. It is an actively organized knowledge base with:
+
+- Study notes for Machine Learning, Deep Learning, Dynamic Systems, Robotics, and AI
+- Custom assets such as diagrams, PDFs, quizzes, and interactive components
+- GitHub Pages deployment through GitHub Actions
+- A Chirpy-based Jekyll setup customized for personal publishing
+
+## Project Structure
+
+```text
 .
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
+├── _config.yml          # Site configuration
+├── _posts/              # Blog posts and study notes
+│   ├── blogging/
+│   └── Study/
+├── _tabs/               # Top-level navigation pages
+├── _includes/           # Reusable layout fragments and widgets
+├── assets/              # Images, CSS, JavaScript, favicons
+├── api/                 # Small API-related utilities/assets
+├── tools/               # Local helper scripts
+└── .github/workflows/   # Build and deploy pipeline
 ```
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
-latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
+## Local Development
 
-## Usage
+### 1. Install dependencies
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+```bash
+bundle install
+```
 
-## Contributing
+### 2. Run the site locally
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+```bash
+bundle exec jekyll s
+```
+
+Then open `http://127.0.0.1:4000`.
+
+## Writing Posts
+
+Add new posts under [`_posts`](/Users/taeyoungkim/workspace/blog/_posts) using Jekyll's filename format:
+
+```text
+YYYY-MM-DD-title.md
+```
+
+This blog currently groups content into areas such as:
+
+- `blogging`
+- `Study/Machine Learning`
+- `Study/Deep Learning`
+- `Study/Dynamic System`
+- `Study/Roboterdynamik`
+- `Study/FunAI`
+
+## Deployment
+
+Pushes to `main` or `master` trigger the GitHub Pages workflow in [`.github/workflows/pages-deploy.yml`](/Users/taeyoungkim/workspace/blog/.github/workflows/pages-deploy.yml).
+
+The pipeline:
+
+1. Checks out the repository
+2. Builds the Jekyll site
+3. Runs `htmlproofer`
+4. Deploys the generated site to GitHub Pages
+
+## Stack
+
+- Jekyll
+- `jekyll-theme-chirpy`
+- Ruby `3.3` in CI
+- GitHub Pages
+- `html-proofer` for static validation
+
+## Notes
+
+- `README.md` is excluded from the generated site build
+- PWA is disabled in [`_config.yml`](/Users/taeyoungkim/workspace/blog/_config.yml)
+- The site title is `PythonToGo`
+- The current description is `Taey's blog about Python and Go.`
 
 ## License
 
-This work is published under [MIT][mit] License.
-
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-[CD]: https://en.wikipedia.org/wiki/Continuous_deployment
-[mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE -->
+Published under the [MIT License](./LICENSE).
