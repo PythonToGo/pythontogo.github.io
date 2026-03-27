@@ -194,4 +194,7 @@ $$
 | Prior 사용 | 없음 (Uniform과 유사) | 사용 | 사용 |
 
 Probabilistic Inference는 데이터(Likelihood)라는 새로운 증거와 기존의 지식(Prior) 사이에서 균형을 맞춰 나가는 과정과 같다. 데이터가 쌓일수록 우리의 믿음(Posterior)은 더 샤프해지고(peaky), 즉 다시 말해 더 확신에 찬 예측을 할 수 있다.
- 
+
+
+---
+---

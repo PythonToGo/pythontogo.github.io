@@ -15,8 +15,15 @@
   "author": "PythonToGo",
   "license": "MIT",
   "dependencies": {
+    "@supabase/supabase-js": "2.57.4",
+    "dotenv": "^16.4.5",
+    "gray-matter": "^4.0.3",
     "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "handlebars": "^4.7.8",
+    "marked": "^12.0.2",
+    "mjml": "^4.15.3",
+    "nodemailer": "^6.9.13"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

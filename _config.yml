@@ -25,6 +25,13 @@ description: >- # used by seo meta and the atom feed
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://pythontogo.github.io"
 
+# Newsletter API base URL
+# - development: use local Express server (`api/server.js`)
+# - production: empty means same-origin (requires your own proxy/serverless setup)
+newsletter:
+  api_base_dev: "http://localhost:3001"
+  api_base_prod: ""
+
 github:
   username: PythonToGo # change to your GitHub username
 

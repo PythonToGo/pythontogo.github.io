@@ -1,0 +1,72 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji" />
+      <mj-text font-size="16px" line-height="1.7" color="#111827" />
+      <mj-button background-color="#111827" color="#ffffff" border-radius="10px" padding="14px 18px" font-size="16px" />
+    </mj-attributes>
+    <mj-style>
+      .card { border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; }
+      .muted { color: #6b7280; }
+      .hr { border-top: 1px solid #e5e7eb; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    </mj-style>
+    <mj-preview>{{subject}}</mj-preview>
+    <mj-title>{{subject}}</mj-title>
+  </mj-head>
+  <mj-body background-color="#f8fafc" width="600px">
+    <mj-section padding="24px 16px">
+      <mj-column>
+        <mj-text font-size="14px" css-class="muted" padding="0 0 12px 0">
+          {{brand_line}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section css-class="card" background-color="#ffffff" padding="0 16px 16px 16px">
+      <mj-column padding="0">
+        {{#if cover_image}}
+        <mj-image src="{{cover_image}}" alt="cover" padding="0" />
+        {{/if}}
+
+        <mj-text font-size="22px" font-weight="700" padding="20px 20px 6px 20px">
+          {{title}}
+        </mj-text>
+        <mj-text font-size="14px" css-class="muted" padding="0 20px 10px 20px">
+          {{date_line}}
+        </mj-text>
+
+        {{#if intro}}
+        <mj-text padding="0 20px 6px 20px">{{intro}}</mj-text>
+        {{/if}}
+
+        <mj-divider css-class="hr" padding="12px 20px" />
+
+        <mj-raw>
+          {{{content_html}}}
+        </mj-raw>
+
+        {{#if cta_url}}
+        <mj-button href="{{cta_url}}" padding="10px 20px 16px 20px">{{cta_text}}</mj-button>
+        {{/if}}
+
+        <mj-divider css-class="hr" padding="12px 20px" />
+        <mj-text font-size="12px" css-class="muted" padding="0 20px 0 20px">
+          구독 해지: <a href="{{unsubscribe_url}}">여기</a>를 클릭하세요.
+        </mj-text>
+        <mj-text font-size="12px" css-class="muted" padding="4px 20px 18px 20px">
+          이 메일은 {{recipient_email}} 주소로 발송되었습니다.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="8px 16px 24px 16px">
+      <mj-column>
+        <mj-text font-size="12px" css-class="muted" padding="0">
+          © {{year}} {{site_name}}. All rights reserved.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
+

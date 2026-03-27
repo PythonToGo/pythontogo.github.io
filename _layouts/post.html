@@ -154,7 +154,27 @@ script_includes:
   </dialog>
   {% endif %}
 
+  {% if page.newsletter_type %}
+  <div class="newsletter-reading-wrapper" data-newsletter-type="{{ page.newsletter_type }}">
+    <div class="content newsletter-content">
+      {{ content }}
+    </div>
+    <div class="newsletter-overlay">
+      <div class="newsletter-overlay-inner">
+        <p class="newsletter-overlay-title">이후 내용은 뉴스레터에서 계속됩니다.</p>
+        <p class="newsletter-overlay-text">
+          Munich Daily와 TaeyAI 뉴스레터를 구독하면,
+          블로그에 다 올라가지 않는 비하인드 스토리와 인사이트를 이메일로 받아볼 수 있습니다.
+        </p>
+        <a href="{{ '/newsletter/' | relative_url }}" class="newsletter-overlay-button">
+          뉴스레터 구독하러 가기
+        </a>
+      </div>
+    </div>
+  </div>
+  {% else %}
   <div class="content">{{ content }}</div>
+  {% endif %}
 
   <div class="post-tail-wrapper text-muted">
     <!-- categories -->
@@ -207,3 +227,128 @@ script_includes:
   </div>
   <!-- div.post-tail-wrapper -->
 </article>
+
+{% if page.newsletter_type %}
+<style>
+  .newsletter-reading-wrapper {
+    position: relative;
+  }
+
+  .newsletter-content {
+    transition: max-height 0.5s ease;
+  }
+
+  .newsletter-reading-wrapper.is-faded .newsletter-content {
+    max-height: 560px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .newsletter-reading-wrapper.is-faded .newsletter-content::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 140px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(248, 250, 252, 0), #f8fafc);
+  }
+
+  .newsletter-overlay {
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 32px;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .newsletter-reading-wrapper.is-faded .newsletter-overlay {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .newsletter-overlay-inner {
+    max-width: 640px;
+    margin: 0 16px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.96);
+    color: #e5e7eb;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(16px);
+  }
+
+  .newsletter-overlay-title {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .newsletter-overlay-text {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .newsletter-overlay-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #f97316;
+    color: #0f172a;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    box-shadow: 0 8px 20px rgba(248, 113, 113, 0.6);
+  }
+
+  .newsletter-overlay-button:hover {
+    background: #fb923c;
+    color: #020617;
+    text-decoration: none;
+  }
+
+  @media (max-width: 576px) {
+    .newsletter-reading-wrapper.is-faded .newsletter-content {
+      max-height: 440px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const wrapper = document.querySelector('.newsletter-reading-wrapper');
+    if (!wrapper) return;
+
+    let faded = false;
+
+    function updateFade() {
+      const rect = wrapper.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+      // 컨텐츠 60% 이상 스크롤했을 때 페이드 아웃 시작
+      const triggerPoint = rect.top + rect.height * 0.6;
+      const scrolled = viewportHeight - triggerPoint;
+
+      if (scrolled > 0 && !faded) {
+        faded = true;
+        wrapper.classList.add('is-faded');
+      }
+    }
+
+    document.addEventListener('scroll', updateFade, { passive: true });
+    window.addEventListener('resize', updateFade);
+    window.addEventListener('load', updateFade);
+  })();
+</script>
+{% endif %}
