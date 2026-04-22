@@ -52,7 +52,7 @@ layout: page
           {% for subcat in subcat_list %}
             {
               "name": "{{ subcat }}",
-              "path": "/categories/{{ subcat | replace: ' ', '_' | downcase }}/"
+              "path": "/categories/{{ subcat | slugify | url_encode }}/"
             }{% unless forloop.last %},{% endunless %}
           {% endfor %}
         {% endif %}
