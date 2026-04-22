@@ -1298,13 +1298,15 @@
       return;
     }
 
+    const formatCategoryLabel = (name) => name.replace(/_/g, ' ').trim();
     const filter = filterText.toLowerCase();
     let html = '<ul class="category-list">';
 
     categoriesData.forEach((category) => {
-      const categoryMatch = category.name.toLowerCase().includes(filter);
+      const categoryLabel = formatCategoryLabel(category.name);
+      const categoryMatch = categoryLabel.toLowerCase().includes(filter);
       const subcategoryMatches = category.subcategories.filter((sub) =>
-        sub.toLowerCase().includes(filter)
+        formatCategoryLabel(sub).toLowerCase().includes(filter)
       );
 
       if (!categoryMatch && subcategoryMatches.length === 0) {
@@ -1321,14 +1323,15 @@
           <i class="fas fa-folder"></i>
           <span class="category-name" onclick="event.stopPropagation(); selectCategory('${
             category.name
-          }')">${escapeHtml(category.name)}</span>
+          }')">${escapeHtml(categoryLabel)}</span>
         </div>
         <ul class="subcategory-list" id="subcat-${
           category.name
         }" style="display: none;">`;
 
       category.subcategories.forEach((subcategory) => {
-        if (!filter || subcategory.toLowerCase().includes(filter)) {
+        const subcategoryLabel = formatCategoryLabel(subcategory);
+        if (!filter || subcategoryLabel.toLowerCase().includes(filter)) {
           const isSelected =
             selectedCategory === category.name &&
             selectedSubcategory === subcategory;
@@ -1336,7 +1339,7 @@
             isSelected ? 'selected' : ''
           }" onclick="selectSubcategory('${category.name}', '${subcategory}')">
             <i class="fas fa-folder-open"></i>
-            <span>${escapeHtml(subcategory)}</span>
+            <span>${escapeHtml(subcategoryLabel)}</span>
           </li>`;
         }
       });
@@ -1392,10 +1395,14 @@
     const displayEl = document.getElementById('category-display');
     if (!displayEl) return;
 
+    const formatCategoryLabel = (name) => name.replace(/_/g, ' ').trim();
+
     if (selectedSubcategory) {
-      displayEl.textContent = `${selectedCategory} / ${selectedSubcategory}`;
+      displayEl.textContent = `${formatCategoryLabel(
+        selectedCategory
+      )} / ${formatCategoryLabel(selectedSubcategory)}`;
     } else if (selectedCategory) {
-      displayEl.textContent = selectedCategory;
+      displayEl.textContent = formatCategoryLabel(selectedCategory);
     } else {
       displayEl.textContent = 'Select Category';
     }
@@ -1459,6 +1466,9 @@
   }
 
   function addNewCategory() {
+    const normalizeCategoryValue = (name) =>
+      name.trim().replace(/\s+/g, '_');
+
     const categoryName = prompt('Enter new category name:');
     if (!categoryName || !categoryName.trim()) return;
 
@@ -1466,8 +1476,10 @@
       'Enter subcategory name (optional, leave empty for no subcategory):'
     );
 
-    selectedCategory = categoryName.trim();
-    selectedSubcategory = subcategoryName?.trim() || null;
+    selectedCategory = normalizeCategoryValue(categoryName);
+    selectedSubcategory = subcategoryName?.trim()
+      ? normalizeCategoryValue(subcategoryName)
+      : null;
 
     // Add to categories data if not exists
     let category = categoriesData.find((c) => c.name === selectedCategory);

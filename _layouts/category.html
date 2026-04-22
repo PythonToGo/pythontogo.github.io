@@ -10,7 +10,7 @@ layout: page
 <div id="page-category">
   <h1 class="ps-lg-2">
     <i class="far fa-folder-open fa-fw text-muted"></i>
-    {{ page.title }}
+    {{ page.title | replace: '_', ' ' }}
     <span class="lead text-muted ps-2">{{ page.posts | size }}</span>
   </h1>
 
@@ -52,7 +52,7 @@ layout: page
           {% for subcat in subcat_list %}
             {
               "name": "{{ subcat }}",
-              "path": "/categories/{{ subcat | downcase | replace: ' ', '-' }}/"
+              "path": "/categories/{{ subcat | replace: ' ', '_' | downcase }}/"
             }{% unless forloop.last %},{% endunless %}
           {% endfor %}
         {% endif %}

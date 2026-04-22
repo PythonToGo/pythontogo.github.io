@@ -111,14 +111,14 @@
           {% endif %}
           {
             "name": "{{ parent_cat }}",
-            "path": "/categories/{{ parent_cat | downcase | replace: ' ', '-' }}/",
+            "path": "/categories/{{ parent_cat | replace: ' ', '_' | downcase }}/",
             "children": [
               {% if has_children %}
                 {% assign sorted_children = parent_children | split: '|' | sort %}
                 {% for child_cat in sorted_children %}
                   {
                     "name": "{{ child_cat }}",
-                    "path": "/categories/{{ child_cat | downcase | replace: ' ', '-' }}/"
+                    "path": "/categories/{{ child_cat | replace: ' ', '_' | downcase }}/"
                   }{% unless forloop.last %},{% endunless %}
                 {% endfor %}
               {% endif %}

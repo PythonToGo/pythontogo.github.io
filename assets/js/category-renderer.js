@@ -1,6 +1,10 @@
 (function() {
   'use strict';
 
+  function formatCategoryLabel(name) {
+    return name.replace(/_/g, ' ').trim();
+  }
+
   function renderCategories() {
     const categoriesDataEl = document.getElementById('categories-data');
     if (!categoriesDataEl) {
@@ -60,7 +64,7 @@
       categoryLink.appendChild(folderIcon);
       
       const categorySpan = document.createElement('span');
-      categorySpan.textContent = category.name.toUpperCase();
+      categorySpan.textContent = formatCategoryLabel(category.name).toUpperCase();
       categoryLink.appendChild(categorySpan);
       
       if (hasChildren) {
@@ -92,7 +96,7 @@
           childLink.appendChild(childFolderIcon);
           
           const childSpan = document.createElement('span');
-          childSpan.textContent = child.name.toUpperCase();
+          childSpan.textContent = formatCategoryLabel(child.name).toUpperCase();
           childLink.appendChild(childSpan);
           
           childLi.appendChild(childLink);
@@ -152,7 +156,9 @@
       subcatIcon.className = 'fas fa-folder-open fa-fw';
       subcatLink.appendChild(subcatIcon);
       
-      subcatLink.appendChild(document.createTextNode(' ' + subcat.name));
+      subcatLink.appendChild(
+        document.createTextNode(' ' + formatCategoryLabel(subcat.name))
+      );
       
       subcategoriesList.appendChild(subcatLink);
     });
@@ -173,4 +179,3 @@
 
   init();
 })();
-
