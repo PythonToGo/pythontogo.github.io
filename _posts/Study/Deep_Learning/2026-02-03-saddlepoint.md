@@ -2,7 +2,7 @@
 title: Saddle point of optimizer
 description: Summary of Saddle point of optimizer
 date: 2026-02-03 10:00:00
-categories: [Study, Deep Learning ]
+categories: [Study, Deep_Learning]
 author: PythonToGo
 tags: [Deep Learning, Saddle point, Adam, RMSprop,  ]
 # pin: true

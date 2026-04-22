@@ -2,7 +2,7 @@
 title: Passivity
 description: Summary of Passivity
 date: 2026-01-05 22:00:00
-categories: [Study, Dynamic System]
+categories: [Study, Dynamic_System]
 author: PythonToGo
 tags: [Dynamic System, Passivity, Dissipativity, Passivity-Based Regulation]
 # pin: true

@@ -2,7 +2,7 @@
 title: Linearization & Phase Portraits
 description: Summary of State-Space Representations, Linearization, and Phase Portraits, Lyapunov Stability
 date: 2025-12-23
-categories: [Study, Dynamic System]
+categories: [Study, Dynamic_System]
 tags: [Dynamic System, Linearization, Phase Portraits, Lyapunov, Stability]
 # pin: true
 math: true

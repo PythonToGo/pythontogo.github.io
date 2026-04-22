@@ -2,7 +2,7 @@
 title: Backstepping
 description: Summary of Backstepping
 date: 2026-01-17 11:00:00
-categories: [Study, Dynamic System]
+categories: [Study, Dynamic_System]
 author: PythonToGo
 tags: [Dynamic System, Backstepping, Strick feedback form, Lyapunov function]
 # pin: true

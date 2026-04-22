@@ -2,7 +2,7 @@
 title: Clustering
 description: Summary of Clustering
 date: 2026-01-28 09:00:00
-categories: [Study, Machine Learning]
+categories: [Study, Machine_Learning]
 author: PythonToGo
 tags: [Machine Learning,Clustering, Unsupervised Learning, Expectation Maximization Algorithm]
 # pin: true

@@ -2,7 +2,7 @@
 title: Sliding Mode
 description: Summary of BaSliding Modeckstepping
 date: 2026-01-18 10:00:00
-categories: [Study, Dynamic System]
+categories: [Study, Dynamic_System]
 author: PythonToGo
 tags: [Dynamic System, Sliding Mode, Switching controller]
 # pin: true

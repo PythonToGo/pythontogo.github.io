@@ -2,7 +2,7 @@
 title: Logical Agents
 description: Summary of Logical Agents
 date: 2026-01-12 05:00:00
-categories: [Study, Fundamentals of Artificial Intelligence ]
+categories: [Study, Fundamentals_of_Artificial_Intelligence]
 author: PythonToGo
 tags: [Fundamentals of Artificial Intelligence, Logical Agents, Horn Clause, Knowlege Base (KB), CNF, ]
 # pin: true

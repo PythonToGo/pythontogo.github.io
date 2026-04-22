@@ -2,7 +2,7 @@
 title: Neural Networks
 description: Summary of Logical Agents
 date: 2026-01-12 05:00:00
-categories: [Study, Deep Learning]
+categories: [Study, Deep_Learning]
 author: PythonToGo
 tags: [Deep Learning, Neural Networks, ]
 # pin: true
