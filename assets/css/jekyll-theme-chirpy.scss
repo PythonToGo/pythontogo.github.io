@@ -21,7 +21,7 @@
 
 /* Category submenu indentation */
 #sidebar .nav-item.category-sub {
-  margin-left: 1.5rem;
+  margin-left: 0.5rem;
   margin-bottom: -0.25rem;
 }
 
@@ -136,7 +136,7 @@
   list-style: none;
   padding-left: 0;
   margin: 0;
-  margin-left: 0.05rem;
+  margin-left: -0.6rem;
   overflow: hidden;
   transition: max-height 0.3s ease, opacity 0.2s ease;
   max-height: 0;
@@ -689,7 +689,7 @@
 /* Post featured image size control */
 /* Adjust the aspect ratio and size of post featured images */
 .post-image,
-img[src*="assets/img/posts"] {
+img[src*='assets/img/posts'] {
   width: 100%;
   height: auto;
   object-fit: cover;
