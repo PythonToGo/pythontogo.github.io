@@ -7,7 +7,7 @@ permalink: /newsletter/
 ---
 <section class="newsletter-hero">
   <div class="newsletter-hero-inner">
-    <p class="eyebrow">PythonToGo Letters</p>
+    <p class="eyebrow">PythonToGo Letters (WIP)</p>
     <h1 class="newsletter-title">Munich Daily &amp; TaeyAI<br />이메일로 받아보기 · Subscribe via Email</h1>
     <p class="newsletter-subtitle">
       매주 뮌헨에서의 일상과 인공지능에 대한 생각을,<br />
