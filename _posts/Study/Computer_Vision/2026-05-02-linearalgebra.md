@@ -17,7 +17,7 @@ image:
 
 
 
-# 3D Computer Vision — Chapter 1: Linear Algebra 완전 정리
+# Linear Algebra for 3D Computer Vision
 
 > TU Munich, Prof. Dr. Daniel Cremers | Summer Term 2026  
 > 강의 내용 정리 + Exercise Sheet 1 풀이
@@ -458,11 +458,22 @@ $Ax = b$ ($A \in \mathbb{R}^{m \times n}$)에서 $x_{\min} = A^\dagger b$는 $|A
 
 ## 13. Exercise Sheet 1 풀이
 
+> 각 문제의 전체 내용(수식 포함)은 아래 PDF 파일에서 확인할 수 있습니다.  
+> 문제 1개당 슬라이드 1페이지, 총 16페이지로 구성되어 있습니다.
+>
+> 📄 **[exercises_questions.pdf](exercises_questions.pdf)**
+
+---
+
 ### Part A: Groups
 
 ---
 
 #### 문제 1. 군의 정의
+
+> **Q.** State the definition of a group.
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="1"></div>
 
 군 $(M, \cdot)$은 집합 $M$과 연산 $\cdot: M \times M \to M$에 대해 다음을 만족한다.
 
@@ -473,6 +484,10 @@ $Ax = b$ ($A \in \mathbb{R}^{m \times n}$)에서 $x_{\min} = A^\dagger b$는 $|A
 ---
 
 #### 문제 2. 오른쪽 항등원·역원이 왼쪽도 됨을 증명
+
+> **Q.** Let $(M, \cdot)$ be a group with right identity $e \in M$ ($a \cdot e = a$) and right inverse $a^{-1} \in M$ ($a \cdot a^{-1} = e$). Show that the right identity is also a left identity and the right inverse is also a left inverse.
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="2"></div>
 
 **왼쪽 역원 ($a^{-1} \cdot a = e$) 증명:**
 
@@ -494,6 +509,10 @@ $$e \cdot a = (a \cdot a^{-1}) \cdot a = a \cdot (a^{-1} \cdot a) = a \cdot e = 
 
 #### 문제 3. 역원의 유일성
 
+> **Q.** Let $(M, \cdot)$ be a group. Show that the inverse element $a^{-1}$ of $a \in M$ is unique.
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="3"></div>
+
 $a \cdot c = e$를 만족하는 $c$가 또 있다고 가정하면
 
 $$c = e \cdot c = (a^{-1} \cdot a) \cdot c = a^{-1} \cdot (a \cdot c) = a^{-1} \cdot e = a^{-1}$$
@@ -503,6 +522,13 @@ $$c = e \cdot c = (a^{-1} \cdot a) \cdot c = a^{-1} \cdot (a \cdot c) = a^{-1} \
 ---
 
 #### 문제 4. 군 여부 판별
+
+> **Q.** Which of the following sets forms a group under matrix multiplication? Prove or disprove.
+> - **(a)** $G_1 := \{A \in \mathbb{R}^{n \times n} \mid \det(A) \neq 0 \text{ and } A^\top = A\}$
+> - **(b)** $G_2 := \{A \in \mathbb{R}^{n \times n} \mid \det(A) = -1\}$
+> - **(c)** $G_3 := \{A \in \mathbb{R}^{n \times n} \mid \det(A) > 0\}$
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="4"></div>
 
 **(a) $G_1 = \{A \in \mathbb{R}^{n \times n} \mid \det(A) \neq 0,\ A^\top = A\}$ → 군 아님**
 
@@ -526,6 +552,10 @@ $AB$가 반드시 대칭이라는 보장이 없으므로 닫혀있음이 성립�
 
 #### 문제 5. 강의에 나온 군과 포함 관계
 
+> **Q.** Which groups were mentioned in the lecture? Write down the names and correct inclusions (e.g. group $A \subset$ group $B$).
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="5"></div>
+
 강의에서 언급된 군: $SO(n)$, $O(n)$, $GL(n)$, $SL(n)$, $SE(n)$, $E(n)$, $A(n)$
 
 포함 관계:
@@ -544,6 +574,10 @@ $$SE(n) \subset E(n) \subset A(n) \subset GL(n+1)$$
 
 #### 문제 6. 벡터 공간의 정의
 
+> **Q.** State the definition of a vector space $V$ over a field $\mathbb{K}$. Does $V$ have to satisfy the group properties? What additional properties does a vector space have?
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="6"></div>
+
 체 $\mathbb{K}$ 위의 벡터 공간 $V$는:
 
 - $(V, +)$가 **가환군(abelian group)**
@@ -554,6 +588,10 @@ $(V, +)$는 반드시 군의 성질을 만족해야 한다. 추가 구조는 스
 ---
 
 #### 문제 7. 선형독립, span, 기저의 정의
+
+> **Q.** Let $V$ be a vector space over $\mathbb{K}$. State the definition of: linear independence of pairwise distinct $v_1, \ldots, v_k \in V$; the span of a set $M \subset V$; a basis of a subspace $U \subset V$.
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="7"></div>
 
 **선형독립:**
 
@@ -568,6 +606,14 @@ $$\text{span}(M) = \left\{ \sum_{i=1}^k \alpha_i v_i \;\middle|\; v_i \in M,\ \a
 ---
 
 #### 문제 8. 선형독립/span/기저 검증
+
+#### 문제 8. 선형독립/span/기저 직접 검증
+
+> **Q.** Show (without using the determinant) for each set whether it is (1) linearly independent, (2) spans $\mathbb{R}^3$, and (3) forms a basis of $\mathbb{R}^3$:
+> - **(a)** $M_1 = \{(1,1,1)^\top,\ (0,1,1)^\top,\ (0,0,1)^\top\}$
+> - **(b)** $M_2 = \{(2,1,0)^\top,\ (1,1,0)^\top\}$
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="8"></div>
 
 **(a) $M_1 = \{(1,1,1)^\top,\ (0,1,1)^\top,\ (0,0,1)^\top\}$**
 
@@ -596,6 +642,10 @@ $\mathbb{R}^3$를 span하지 못함 → **$M_2$는 $\mathbb{R}^3$의 기저가 �
 
 #### 문제 9. 내적의 정의
 
+> **Q.** A Hilbert space $H$ is a (finite-dimensional) vector space over $\mathbb{K}$ endowed with an inner product. State the definition of an inner product.
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="9"></div>
+
 내적 $\langle \cdot, \cdot \rangle: H \times H \to \mathbb{K}$은 다음을 만족한다.
 
 - **대칭성:** $\langle u, w \rangle = \langle w, u \rangle$
@@ -605,6 +655,12 @@ $\mathbb{R}^3$를 span하지 못함 → **$M_2$는 $\mathbb{R}^3$의 기저가 �
 ---
 
 #### 문제 10. 힐베르트 공간 여부 확인
+
+> **Q.** Do the following form Hilbert spaces with the given inner product?
+> - **(a)** $\mathbb{R}^n$ with $\langle x, y \rangle = x^\top y$
+> - **(b)** $\mathbb{R}^{n \times m}$ with $\langle A, B \rangle = \mathrm{tr}(A^\top B)$
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="10"></div>
 
 **(a) $\mathbb{R}^n$, $\langle x, y \rangle = x^\top y$ → 힐베르트 공간 맞음**
 
@@ -624,6 +680,10 @@ $$\text{tr}(A^\top B) = \sum_{k=1}^m a_k^\top b_k$$
 
 #### 문제 11. Frobenius norm이 내적 $\text{tr}(A^\top B)$로부터 유도됨을 증명
 
+> **Q.** Show that the Frobenius norm $\|A\|_F = \sqrt{\sum_{i,j} a_{ij}^2}$ for $A \in \mathbb{R}^{n \times m}$ is the norm induced by the inner product $\langle A, B \rangle = \mathrm{tr}(A^\top B)$.
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="11"></div>
+
 $$\langle A, A \rangle = \text{tr}(A^\top A) = \sum_{k=1}^m a_k^\top a_k = \sum_{k=1}^m \sum_{i=1}^n a_{ik}^2 = \sum_{i,j} a_{ij}^2$$
 
 따라서
@@ -637,6 +697,11 @@ $$\sqrt{\langle A, A \rangle} = \sqrt{\sum_{i,j} a_{ij}^2} = \|A\|_F \quad \squa
 ---
 
 #### 문제 12. 대칭행렬의 비직교 고유벡터 → 같은 고유값
+
+> **Q.** Let $A$ be a real symmetric matrix with eigenvalues $\lambda_a$, $\lambda_b$ and eigenvectors $v_a$, $v_b$. Prove: if $v_a$ and $v_b$ are not orthogonal, then $\lambda_a = \lambda_b$.  
+> *Hint: Consider $\langle Av_a, v_b \rangle$.*
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="12"></div>
 
 **힌트:** $\langle Av_a, v_b \rangle$를 두 방향으로 계산한다.
 
@@ -658,6 +723,11 @@ $\langle v_a, v_b \rangle \neq 0$ (비직교 가정)이면 $\lambda_a = \lambda_
 
 #### 문제 13. $\ker(A) = \ker(A^\top A)$ 증명
 
+> **Q.** Let $A \in \mathbb{R}^{m \times n}$. Prove that $\ker(A) = \ker(A^\top A)$.  
+> *Hint: Show both directions: (a) $x \in \ker(A) \Rightarrow x \in \ker(A^\top A)$ and (b) $x \in \ker(A^\top A) \Rightarrow x \in \ker(A)$.*
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="13"></div>
+
 **(a) $x \in \ker(A) \Rightarrow x \in \ker(A^\top A)$:**
 
 $Ax = 0$이면 $A^\top A x = A^\top (Ax) = A^\top 0 = 0$ ✓
@@ -671,6 +741,14 @@ $$x^\top A^\top A x = 0 \iff (Ax)^\top(Ax) = 0 \iff \|Ax\|^2 = 0 \iff Ax = 0 \qu
 ---
 
 #### 문제 14. SVD의 모든 것
+
+> **Q.** Let $A = U\Sigma V^\top$ be the SVD of $A \in \mathbb{R}^{m \times n}$.
+> - **(a)** Write down the dimensions of $U$, $\Sigma$, and $V$.
+> - **(b)** What are the similarities and differences between the SVD and the eigenvalue decomposition?
+> - **(c)** What is the relationship between $U$, $\Sigma$, $V$ and the eigenvalues/eigenvectors of $A^\top A$ and $AA^\top$?
+> - **(d)** What is the interpretation of the singular values? What do they tell us about $A$?
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="14"></div>
 
 **(a) 차원:**
 
@@ -705,6 +783,13 @@ $$x^\top A^\top A x = 0 \iff (Ax)^\top(Ax) = 0 \iff \|Ax\|^2 = 0 \iff Ax = 0 \qu
 
 #### 문제 15. SVD로 Rank-Nullity 정리 증명
 
+> **Q.** Let $A \in \mathbb{R}^{m \times n}$ with SVD $A = U\Sigma V^\top$ and $r$ nonzero singular values.
+> - **(a)** Using the SVD, show that $\mathrm{rank}(A) = r$ and that the null space of $A$ is spanned by the last $n-r$ columns of $V$.
+> - **(b)** Conclude that $\mathrm{rank}(A) + \dim(\ker(A)) = n$ (the rank-nullity theorem).
+> - **(c)** Compute the SVD of $A = \begin{pmatrix}1&2\\2&4\\3&6\end{pmatrix}$ and verify the rank-nullity theorem.
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="15"></div>
+
 **(a) rank(A) = r이고 null space = V의 마지막 n-r열:**
 
 $A = U\Sigma V^\top$에서
@@ -728,6 +813,14 @@ $$\text{rank}(A) + \dim(\ker(A)) = 1 + 1 = 2 = n \quad \checkmark$$
 ---
 
 #### 문제 16. Low-Rank Approximation (Eckart-Young 정리)
+
+> **Q.** The Eckart–Young theorem states that the best rank-$k$ approximation of $A$ in the Frobenius norm is $A_k = \sum_{i=1}^k \sigma_i u_i v_i^\top$.
+> - **(a)** Show that $\|A - A_k\|_F^2 = \sum_{i=k+1}^r \sigma_i^2$.  
+>   *Hint: Use the fact that the Frobenius norm is unitarily invariant: $\|UBV^\top\|_F = \|B\|_F$.*
+> - **(b)** If $A \in \mathbb{R}^{m \times n}$ has rank $r$, how many numbers do we need to store the full matrix? How many for the rank-$k$ approximation $A_k = U_k\Sigma_k V_k^\top$?
+> - **(c)** For what values of $k$ does the rank-$k$ approximation actually save storage?
+
+<div class="pdf-viewer-container" data-pdf="/assets/img/posts/study-cv/exercises_questions.pdf" data-page="16"></div>
 
 **(a) $\|A - A_k\|_F^2 = \sum_{i=k+1}^r \sigma_i^2$ 증명:**
 
@@ -755,5 +848,3 @@ $$k(m + n) < mn \iff k < \frac{mn}{m+n}$$
 즉, rank가 행/열 수의 절반 미만일 때 rank-$k$ 근사가 저장 공간을 절약한다.
 
 ---
-
-*본 포스팅은 TU Munich 3D Computer Vision (Summer 2026) 강의 노트와 Exercise Sheet 1을 기반으로 작성되었습니다.*
