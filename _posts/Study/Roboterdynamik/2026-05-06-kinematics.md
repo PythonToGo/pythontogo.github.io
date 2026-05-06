@@ -4,7 +4,7 @@ description: 로보틱스 강의 첫 번째 내용 정리. Rigid Body Kinematics
 date: 2026-05-06 12:00:00
 categories: [Study, Roboterdynamik]
 author: PythonToGo
-tags: [Roboterdynamik, rigid-body, rotation-matrix, rodrigues, euler]
+tags: [Roboterdynamik, rigid-body, Rotation Matrix, rodrigues, euler]
 math: true
 mermaid: true
 comments: true
@@ -25,7 +25,7 @@ image:
 
 로봇 링크를 모델링할 때 **rigid body(강체)** 를 가정한다.
 
-![Rigid vs Elastic Body](/assets/img/posts/study-rd/kinematicsrigid_vs_elastic.svg)
+![Rigid vs Elastic Body](/assets/img/posts/study-rd/kinematics/rigid_vs_elastic.svg)
 *그림 1. Rigid body는 두 점 사이 거리가 항상 일정하고, elastic body는 힘에 의해 변형된다.*
 
 - **Rigid body**: 어떤 두 점 사이의 거리가 운동 중에도 변하지 않음
@@ -68,7 +68,7 @@ $${}^b V_P = \begin{bmatrix} x_{vb} \\ y_{vb} \\ z_{vb} \end{bmatrix} \quad \lef
 
 ## 3. Base Transformation — Rotation Matrix
 
-![Rotation Matrix Transformation](/assets/img/posts/study-rd/kinematicsrotation_matrix_transform.svg)
+![Rotation Matrix Transformation](/assets/img/posts/study-rd/kinematics/rotation_matrix_transform.svg)
 *그림 2. 같은 벡터를 Frame 0, i, b에서 표현할 때 rotation matrix로 변환한다. 역변환은 transpose.*
 
 같은 벡터 $\vec{r}_{PQ}$를 Frame 1과 Frame 2에서 각각 표현하면:
@@ -105,7 +105,7 @@ $${}_{2}A_1 = \begin{bmatrix} \mid & \mid & \mid \\ {}_{2}e_{x_1} & {}_{2}e_{y_1
 
 ### 6-1. 벡터 분해
 
-![Rodrigues Decomposition](/assets/img/posts/study-rd/kinematicsrodrigues_decomposition.svg)
+![Rodrigues Decomposition](/assets/img/posts/study-rd/kinematics/rodrigues_decomposition.svg)
 *그림 3. r1을 축 방향(평행) 성분과 수직 성분으로 분해. 평행 성분은 불변, 수직 성분만 phi만큼 회전.*
 
 벡터 $\vec{r}_1$을 $\vec{n}$ 기준으로 분해:
@@ -158,7 +158,6 @@ $\tilde{n}^2 = nn^T - I$는 정의가 아니라 **계산으로 증명되는 항�
 
 {% include x_axis_rotation_interactive.html %}
 
-![x-axis Rotation Matrix](/assets/img/posts/study-rd/kinematicsx_axis_rotation.svg)
 *그림 4. x축 회전에서 φ를 바꾸면 행렬 원소와 y-z 평면 벡터가 어떻게 달라지는지 보여준다.*
 
 $\vec{n} = [1,0,0]^T$ 대입:
@@ -171,7 +170,7 @@ $${}_{1}A_2 = \begin{bmatrix}1&0&0\\0&\cos\varphi&-\sin\varphi\\0&\sin\varphi&\c
 
 ## 7. Difference Velocities (상대속도 표기법)
 
-![Difference Velocity Chain](/assets/img/posts/study-rd/kinematicsdifference_velocity_chain.svg)
+![Difference Velocity Chain](/assets/img/posts/study-rd/kinematics/difference_velocity_chain.svg)
 *그림 5. Body 0(지구) → Body 1(기차) → Body 2(자동차)의 속도 체인. 절대속도는 차이속도의 합.*
 
 표기 규칙: ${}_{frame}\mathbf{v}_{body}$
