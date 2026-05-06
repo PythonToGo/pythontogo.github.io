@@ -1,0 +1,116 @@
+<style>
+#rot-canvas { display:block; }
+.ctrl { display:flex; align-items:center; gap:12px; margin:8px 0; font-size:13px; color:var(--color-text-secondary); }
+.ctrl input[type=range] { flex:1; }
+.val { min-width:44px; text-align:right; font-variant-numeric: tabular-nums; color:var(--color-text-primary); }
+</style>
+<canvas id="rot-canvas" width="680" height="260" style="width:100%;height:auto;"></canvas>
+<div class="ctrl">
+  <span>φ =</span>
+  <input type="range" id="phi" min="0" max="360" value="45" oninput="draw()">
+  <span class="val" id="phi-val">45°</span>
+</div>
+<script>
+const canvas = document.getElementById('rot-canvas');
+const ctx = canvas.getContext('2d');
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const fg  = isDark ? '#c2c0b6' : '#3d3d3a';
+const fg2 = isDark ? '#888780' : '#888780';
+const blue  = '#378ADD';
+const coral = '#D85A30';
+const teal  = '#1D9E75';
+const amber = '#BA7517';
+
+function draw() {
+  const phi = +document.getElementById('phi').value;
+  document.getElementById('phi-val').textContent = phi + '°';
+  const r = phi * Math.PI / 180;
+  const c = Math.cos(r), s = Math.sin(r);
+
+  ctx.clearRect(0, 0, 680, 260);
+
+  // --- LEFT: matrix display ---
+  const mx = 40, my = 30, cw = 220, rh = 46;
+  ctx.font = '500 14px sans-serif';
+  ctx.fillStyle = fg;
+  ctx.textAlign = 'left';
+  ctx.fillText('Ax(φ) =', mx, my + 20);
+
+  const vals = [
+    [1, 0, 0],
+    [0, fmt(c), fmt(-s)],
+    [0, fmt(s),  fmt(c)]
+  ];
+  const colors = [
+    [fg2, fg2, fg2],
+    [fg2, blue, coral],
+    [fg2, coral, blue]
+  ];
+  const ox = mx + 90, oy = my + 5;
+  // bracket
+  ctx.strokeStyle = fg2; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(ox-4, oy); ctx.lineTo(ox-10, oy); ctx.lineTo(ox-10, oy+rh*3); ctx.lineTo(ox-4, oy+rh*3); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ox+180+4, oy); ctx.lineTo(ox+180+10, oy); ctx.lineTo(ox+180+10, oy+rh*3); ctx.lineTo(ox+180+4, oy+rh*3); ctx.stroke();
+
+  for (let row=0; row<3; row++) {
+    for (let col=0; col<3; col++) {
+      const x = ox + col*62 + 8;
+      const y = oy + row*rh + rh/2 + 4;
+      ctx.font = '400 14px sans-serif';
+      ctx.fillStyle = colors[row][col];
+      ctx.textAlign = 'center';
+      ctx.fillText(String(vals[row][col]), x, y);
+    }
+  }
+
+  // --- RIGHT: 2D circle showing rotation in yz-plane ---
+  const cx2 = 500, cy2 = 130, R = 90;
+  ctx.strokeStyle = fg2; ctx.lineWidth = 0.8;
+  ctx.beginPath(); ctx.arc(cx2, cy2, R, 0, Math.PI*2); ctx.stroke();
+
+  // axes y and z
+  arrow(cx2, cy2, cx2+R+14, cy2, fg2, 'y');
+  arrow(cx2, cy2, cx2, cy2-R-14, fg2, 'z');
+
+  // original vector (y-axis direction)
+  const v0y = R, v0z = 0;
+  arrow(cx2, cy2, cx2+v0y, cy2-v0z, teal, 'r⃗₁');
+
+  // rotated vector
+  const v1y = R*c, v1z = R*s;
+  arrow(cx2, cy2, cx2+v1y, cy2-v1z, coral, 'r⃗₂');
+
+  // phi arc
+  ctx.strokeStyle = amber; ctx.lineWidth = 1.5;
+  ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.arc(cx2, cy2, 44, -Math.PI/2, -(Math.PI/2 - r), false); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = amber; ctx.font = '500 13px sans-serif'; ctx.textAlign = 'center';
+  const midA = -(Math.PI/2 - r/2);
+  ctx.fillText('φ', cx2 + 54*Math.cos(midA), cy2 + 54*Math.sin(midA));
+
+  // label
+  ctx.fillStyle = fg2; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('rotation in y–z plane (x-axis fixed)', cx2, cy2+R+28);
+}
+
+function fmt(v) {
+  if (Math.abs(v) < 1e-10) return '0';
+  if (Math.abs(v-1) < 1e-10) return '1';
+  if (Math.abs(v+1) < 1e-10) return '-1';
+  return v.toFixed(2);
+}
+
+function arrow(x1,y1,x2,y2,color,label) {
+  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+  const ux=dx/len, uy=dy/len;
+  ctx.strokeStyle=color; ctx.lineWidth=2; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  const hx=x2-ux*8, hy=y2-uy*8;
+  ctx.beginPath(); ctx.moveTo(x2,y2); ctx.lineTo(hx-uy*4,hy+ux*4); ctx.lineTo(hx+uy*4,hy-ux*4); ctx.closePath();
+  ctx.fillStyle=color; ctx.fill();
+  if(label){ctx.fillStyle=color;ctx.font='500 13px sans-serif';ctx.textAlign='center';ctx.fillText(label,x2+ux*14+uy*0,y2+uy*14-ux*0);}
+}
+
+draw();
+</script>
