@@ -1,5 +1,5 @@
 ---
-title: "Robotics 01: Rigid Body Kinematics 기초"
+title: "Robotics 01: Rigid Body Kinematics 기초 2/2"
 description: 로보틱스 강의 두 번째 내용 정리. Rotation Matrix 부터 Acceleration in Moving Frame 까지.
 date: 2026-05-14 4:00:00
 categories: [Study, Roboterdynamik]
