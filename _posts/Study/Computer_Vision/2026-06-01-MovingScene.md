@@ -1,7 +1,7 @@
 ---
 title: Representing a Moving Scene
 description: 3D Computer Vision 에 필요한 강체 운동(rigid-body motion)과 Lie 군/대수 개념을 정리합니다. 관련 참조는 Technical University of Munich 의 Prof. Dr. Daniel Cremers 교수님의 3D Computer Vision 수업을 기반으로 작성되었습니다.
-date: 2026-05-02 11:00:00
+date: 2026-06-01 11:00:00
 categories: [Study, Computer_Vision]
 author: PythonToGo
 tags: [Computer Vision, Rigid Body Motion, Lie Group]
@@ -9,6 +9,8 @@ tags: [Computer Vision, Rigid Body Motion, Lie Group]
 math: true
 mermaid: true
 comments: true
+image:
+ /assets/img/posts/study-cv/ch2_fig2_lie.png
 ---
 {% include pdf-viewer.html %}
 
